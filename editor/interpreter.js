@@ -21,10 +21,19 @@ function check() {
 	} else if (code[position] == "r") {
 		accumulator = Math.round(Math.random()*accumulator);
 		position += 1;
+	} else if (code[position] == "`") {
+		string = "";
+		position += 1;
+		while (code[position] != "`") {
+			string += code[position];
+			position += 1
+		}
+		output += string;
+		position += 1;
 	} else if ("0123456789".indexOf(code[position]) !== -1) {
 		try {
 			n = ""
-			while ("0123456789".indexOf(code[position]) !== -1) {
+			while ("0123456789.".indexOf(code[position]) !== -1) {
 				n += code[position];
 				position += 1;
 			}
@@ -33,7 +42,7 @@ function check() {
 			accumulator = Number(n);
 		}
 	} else if (code[position] == "~") {
-		if ("(){}+-naod@;|r~*/%I<>=^vLP".indexOf(code[position+1]) === -1) {
+		if ("(){}+-naod@;|r~*/%I<>=^vLP`".indexOf(code[position+1]) === -1) {
 			variables[code[position+1]] = accumulator;
 			position += 2;
 		} else {
