@@ -113,11 +113,7 @@ function check() {
 		position += 1;
 		divtempaccumulator = accumulator;
 		check();
-		if (accumulator !== 0) {
-			accumulator = divtempaccumulator/accumulator;
-		} else {
-			accumulator = 0;
-		}
+		accumulator = Math.floor(divtempaccumulator/accumulator);
 	} else if (code[position] == "%") {
 		position += 1;
 		modtempaccumulator = accumulator;
