@@ -124,7 +124,11 @@ function dcheck() {
 		position += 1;
 		divtempaccumulator = accumulator;
 		check();
-		accumulator = Math.floor(divtempaccumulator/accumulator);
+		if (accumulator !== 0) {
+			accumulator = divtempaccumulator/accumulator;
+		} else {
+			accumulator = 0;
+		}
 	} else if (code[position] == "%") {
 		position += 1;
 		modtempaccumulator = accumulator;
