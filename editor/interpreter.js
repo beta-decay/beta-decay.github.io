@@ -21,10 +21,19 @@ function check() {
 	} else if (code[position] == "r") {
 		accumulator = Math.round(Math.random()*accumulator);
 		position += 1;
-	} else if ("0123456789".indexOf(code[position]) !== -1) {
+	} else if (code[position] == "`") {
+		string = "";
+		position += 1;
+		while (code[position] != "`") {
+			string += code[position];
+			position += 1
+		}
+		output += string;
+		position += 1;
+	} else if ("0123456789.".indexOf(code[position]) !== -1) {
 		try {
 			n = ""
-			while ("0123456789".indexOf(code[position]) !== -1) {
+			while ("0123456789.".indexOf(code[position]) !== -1) {
 				n += code[position];
 				position += 1;
 			}
@@ -33,7 +42,7 @@ function check() {
 			accumulator = Number(n);
 		}
 	} else if (code[position] == "~") {
-		if ("(){}+-naod@;|r~*/%I<>=^vLP".indexOf(code[position+1]) === -1) {
+		if ("(){}+-naod@;|r~*/%I<>=^vLP_`&.$".indexOf(code[position+1]) === -1) {
 			variables[code[position+1]] = accumulator;
 			position += 2;
 		} else {
@@ -42,6 +51,16 @@ function check() {
 			output = "Name Error: " + code[position+1] + " at position " + (position+1) + " is a reserved keyword";
 			position = code.length * 2;
 		}
+	} else if (code[position] == "&") {
+		position += 1;
+		if (variables.hasOwnProperty(code[position]) !== -1) {
+			variables[code[position]] = variables[code[position]] + 1;
+			accumulator = variables[code[position]];
+		} else {
+			variables[code[position]] = 1;
+			accumulator = 1;
+		}
+		position += 1;
 	} else if (code[position] == "(") {
 		tempaccumulator.push(accumulator);
 		temppos.push(position + 1);
@@ -113,7 +132,11 @@ function check() {
 		position += 1;
 		divtempaccumulator = accumulator;
 		check();
-		accumulator = Math.floor(divtempaccumulator/accumulator);
+		if (accumulator !== 0) {
+			accumulator = divtempaccumulator/accumulator;
+		} else {
+			accumulator = 0;
+		}
 	} else if (code[position] == "%") {
 		position += 1;
 		modtempaccumulator = accumulator;
@@ -129,6 +152,9 @@ function check() {
 		subtempaccumulator = accumulator;
 		check();
 		accumulator = subtempaccumulator - accumulator;
+	} else if (code[position] == "_") {
+		position += 1
+		accumulator = Math.floor(accumulator);
 	} else if (code[position] == "P") {
 		position += 1;
 		powtempaccumulator = accumulator;
@@ -136,15 +162,18 @@ function check() {
 		accumulator = Math.pow(powtempaccumulator,accumulator);
 	} else if (code[position] == "I") {
 		//var stdin = prompt("Enter input:");
-		stdin = input.shift()
-		if (stdin !== "") {
-			try {
-				stdin = Number(stdin);
-			} catch(e) {
-				stdin = stdin.charCodeAt(0);
+		stdin = eval(input.shift());
+		if (typeof stdin === 'string') {
+			variables["$"] = stdin.length;
+			for (var i = stdin.length-1; i >= 1; i--) {
+				input.unshift(stdin.charCodeAt(i));
 			}
-			accumulator = stdin;
+			stdin = stdin.charCodeAt(0);
+		} else {
+			stdin = Number(stdin);
 		}
+		accumulator = stdin;
+		
 		position += 1
 	} else if (code[position] == ">") {
 		position += 1;
@@ -202,7 +231,7 @@ function check() {
 		return code.length*2;
 	} else if (code[position] == "L") {
 		var log = Math.log10(accumulator);
-		accumulator = Math.floor(log);
+		accumulator = log;
 		position += 1
 	} else {
 		if (functions.hasOwnProperty(code[position])) {
@@ -269,7 +298,13 @@ function interpreter() {
 	funcpos = [];
 	funccode = [];
 	
-	variables = {};
+	variables = {"$": 0};
+
+	for (var i = 0; i < input.length; i++) {
+		if (typeof eval(input[i]) === 'string' && variables["$"] === 0) {
+			variables["$"] = input[i].length-2;
+		}
+	}
 	
 	runCode();
 	
