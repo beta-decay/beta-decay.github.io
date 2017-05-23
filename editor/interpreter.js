@@ -53,7 +53,7 @@ function check() {
 		}
 	} else if (code[position] == "&") {
 		position += 1;
-		if (variables.hasOwnProperty(code[position]) !== -1) {
+		if (variables.hasOwnProperty(code[position])) {
 			variables[code[position]] = variables[code[position]] + 1;
 			accumulator = variables[code[position]];
 		} else {
