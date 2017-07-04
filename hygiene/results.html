@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+		<link rel="stylesheet" href="./stylesheet.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<style>
+			table {
+				border-collapse: collapse;
+				width: 100%;
+			}
+			td {
+				width: 5px;
+				vertical-align: center;
+				padding: 5px;
+				border-bottom: 1px solid darkgreen;
+			}
+
+			#name {
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Results</h1>
+		<table id="table-here"></table>
+		<script>
+			function getParameterByName(name) {
+			    var url = window.location.href;
+			    name = name.replace(/[\[\]]/g, "\\$&");
+			    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+			        results = regex.exec(url);
+			    if (!results) return null;
+			    if (!results[2]) return '';
+			    return decodeURIComponent(results[2].replace(/\+/g, " "));
+			}
+				
+			var lat = getParameterByName("lat");
+			var lon = getParameterByName("lon");
+
+			console.log(lat+" "+lon);
+			
+			var url = "http://api.ratings.food.gov.uk/Establishments?pageSize=10&pageNumber=1&maxDistanceLimit=10&sortOptionKey=distance&lat="+lat+"&lon="+lon;
+
+			$.ajax({
+				url: url,
+				headers: {"x-api-version": 2},
+				success: function(data) {
+					console.log(data);
+					var locations = data.establishments;
+					
+					for (var i = 0; i < locations.length; i++) {
+						var business = locations[i];
+						var name = business.BusinessName;
+						var rating = business.RatingValue;
+						var date = business.RatingDate.split("T")[0];
+
+						if (rating.length > 1) {
+							rating = "0";
+						}
+
+						var html = "<tr><td><div id=\"name\">"+name+"</div><br/>Last Inspection: "+date+"</td><td><img src=\"./num"+rating+".png\" ></td></tr>";
+
+						document.getElementById("table-here").innerHTML += html;
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

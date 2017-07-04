@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+		<link rel="stylesheet" href="./stylesheet.css">
+		<style>
+			button {
+				width: 10em;
+			}
+
+			input {
+				width: 20em;
+			}
+		</style>
+		<script>
+			function openLink(lat, lon) {
+				window.location.href = "results.html?lat="+lat+"&lon="+lon;
+			}
+
+			function currLoc() {
+				navigator.geolocation.getCurrentPosition(function(pos) {
+					openLink(pos.coords.lat, pos.coords.lon);
+				});
+			}
+
+			function search() {
+				var address = document.getElementById("placename").value;
+				var req = new XMLHttpRequest();
+
+				req.open("get", "https://maps.googleapis.com/maps/api/geocode/json?address="+encodeURIComponent(address)+"&key=AIzaSyD0nveMk1jf-vkKDWJU6yun6-fzGzLG72U", false);
+
+				req.onload = function(e) {
+   					if (req.readyState == 4 && req.status == 200) {
+   						var data = JSON.parse(req.responseText);
+
+   						var lat = data.results[0].geometry.viewport.northeast.lat;
+   						var lon = data.results[0].geometry.viewport.northeast.lng;
+
+   						openLink(lat, lon);
+   					}
+   				}
+   				req.send(null);
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Hygiene Checker</h1>
+		<table>
+			<tr>
+				<td colspan="2">
+					<input id="placename" placeholder="Search by address">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button onclick="javascript:search()">Search</button>
+				</td>
+				<td>
+					<button onclick="javascript:currLoc()">Current Location</button>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

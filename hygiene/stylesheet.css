@@ -1,0 +1,10 @@
+body {
+	background: lightgreen;
+	font-family: sans-serif;
+	text-align: center;
+}
+
+table {
+	margin-left: auto;
+    margin-right: auto;
+}
