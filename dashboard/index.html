@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <style>
+            body {
+                font-family:sans-serif;
+                background: lightgrey;
+                height: 100vh; 
+                overflow: hidden;
+            }
+            
+            table {
+                border-collapse: collapse;
+                background: darkgrey;
+                width: 100%;
+                height: 98vh;
+            }
+            
+            th {
+                border: 1px solid black;
+                padding: 10px;
+            }
+            
+            #time {
+                font-size: 250%;
+                font-weight: 700
+            }
+            
+            td {
+                border: 1px solid black;
+                padding: 20px;
+                padding-top: 0px;
+            }
+            
+            #weather_cell {
+                width: 35%;
+                text-align: center;
+                background-color: #30737b;
+                color: whitesmoke;
+            }
+            
+            #temps {
+                font-size: 170%;
+                font-weight:normal;
+            }
+            
+            #description {
+                font-size: 120%
+            }
+            
+            #news_cell {
+                width: 65%;
+                background-color: #bb1919;
+                color: whitesmoke;
+            }
+            
+            #headline {
+                font-size: 180%;
+                font-family: Verdana;
+            }
+            
+            #headline_text {
+                font-size: 160%;
+                font-family: Verdana;
+            }
+        </style>
+        <script>
+            var months = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ];
+            
+            var weekdays = [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday"
+            ];
+            
+            var location_num = "2641897";
+            
+            function ordinal(n) {
+                return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th');
+            }
+            
+            function getTime() {
+                var date = new Date();
+                var time = date.toISOString().slice(11,16);
+                var month = months[date.getMonth()];
+                var day = date.getDate();   
+                var dayofweek = weekdays[date.getDay()];
+                
+                document.getElementById("time_cell").innerHTML = '<strong id="time">'+time+', '+dayofweek+' '+ordinal(day)+' '+month+'</strong>';
+            }
+            
+            function getWeather() { 
+                var FEED_URL = "https://api.rss2json.com/v1/api.json?rss_url=http://open.live.bbc.co.uk/weather/feeds/en/"+location_num+"/3dayforecast.rss";
+                $.getJSON(FEED_URL, function (data) {
+                    var image_no = data.feed.image.replace("http://static.bbci.co.uk/weather/0.3.203/images/icons/individual_57_icons/en_on_light_bg/","").replace(".gif","");
+                    
+                    var image_url = "./weather_icons/"+image_no+"_animated.svg";
+                    
+                    var weather = data.items[0].title.replace(", ", "</h1><h2 id='temps'>").replace(/\(-*\d+\xb0F\)/g,"<br/>").replace(/imum/g,'').replace(/erature/g,'');
+                    
+                    for(var j = 0; j < weekdays.length; j++) {
+                        weather = weather.replace(weekdays[j]+": ", "");
+                    }
+                    
+                    var description = data.items[0].description.replace(/,/g,"<br/><strong>").replace(/:/g,":</strong>").replace(/\(-*\d+\xb0F\)/g,"");
+                    
+                    document.getElementById("weather_cell").innerHTML = '<h1>'+weather+'</h2><img src="'+image_url+' " width=40%/><p id="description"><strong>'+description+'</p>';
+                });
+            }
+            
+            function getNews() {
+                var FEED_URL = "https://api.rss2json.com/v1/api.json?rss_url=http://feeds.bbci.co.uk/news/rss.xml";
+                var news_html = "";
+                $.getJSON(FEED_URL, function (data) {
+                    news_html += "<div onclick='location.href=\""+data.items[0].link+"\"';><h2 id='headline'>"+data.items[0].title+"</h2><span id='headline_text'>"+data.items[0].description+"</span></div><br/><hr/>";
+                    for (var i = 1; i < 6; i++) {
+                        news_html += "<div onclick='location.href=\""+data.items[i].link+"\"';><h3>"+data.items[i].title+"</h3>"+data.items[i].description+"</div><br/><hr/>";
+                    }
+                    document.getElementById("news_cell").innerHTML = news_html.slice(0,news_html.length - 10);
+                });
+            }
+            
+            $('document').ready(function() {        
+                getWeather();
+                getNews(); 
+                getTime();
+                
+                setInterval(function() {
+                    getWeather();
+                    getNews(); 
+                    getTime();
+                }, 60000);
+            });
+        </script>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th colspan="2" id="time_cell">12:00 AM, Saturday 13th October</th>
+            </tr>
+            <tr>
+                <td id="weather_cell" onclick="location.href='http://www.bbc.co.uk/weather/'+location_num"></td>
+                <td id="news_cell"></td>
+            </tr>
+        </table>
+    </body>
+</html>
