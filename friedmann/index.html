@@ -23,12 +23,7 @@
 			}
 
 			.xp {
-				width: 20%;
-                text-align: left;
-			}
-
-			.txt {
-				width: 60%;
+                text-align: right;
 			}
 
 			body {
@@ -51,6 +46,7 @@
 			}
 
 			table {
+                margin: 0 auto;
 				border-collapse: collapse;
 			}
 
@@ -187,35 +183,23 @@
                 <tr>
 					<td class="xp"><strong><em>Current Radiation Density Parameter:</em></strong></td>
                     <td><em class="inline-math">&Omega;<sub>0,R</sub> = </em><input id="rad" value="0" /></td>
-					<td class="txt">
-						This is the term which  determines how much of the Universe is made up of radiation.
-					</td>
 				</tr>
 				<tr>
 					<td class="xp"><strong><em>Current Mass Density Parameter:</em></strong></td>
                     <td><em class="inline-math">&Omega;<sub>0,M</sub> = </em><input id="mass" value="0.7" /></td>
-					<td class="txt">
-						This is the term which  determines how much of the Universe is made up of mass (both Baryonic and Dark).
-					</td>
 				</tr>
                 <tr>
 					<td class="xp"><strong><em>Current Vacuum Density Parameter:</em></strong></td>
                     <td><em class="inline-math">&Omega;<sub>0,&Lambda;</sub> = </em><input id="vac" value="0.3" /></td>
-					<td class="txt">
-                        This is the term which  determines how much of the Universe is made up of vacuum energy, or Dark Energy. This is akin to <em class="inline-math">&Lambda;</em>, the cosmological constant.
-					</td>
 				</tr>
                 <tr style="border-bottom: none">
 					<td class="xp"><strong><em>Current Hubble Rate:</em></strong></td>
                     <td><em class="inline-math">H<sub>0</sub> = </em><input id="H" value="0.07" /><em class="inline-math"> Gyrs<sup>-1</sup></em></td>
-					<td class="txt">
-                        This determines how quickly the universe is expanding today. It is also known as the Hubble Constant for our current universe.
-					</td>
 				</tr>
 			</table>
 			<div style="text-align: center;padding: 10px">
-                <button style="width: 48%;font-weight: bold;font-size: 110%;height: 70px" onclick="resetVals()">Reset Values to Our Universe</button>
-				<button style="width: 48%;font-weight: bold;font-size: 110%;height: 70px" onclick="runSim()">Run Simulation</button>
+                <button style="width: 48%;font-weight: bold;font-size: 100%;height: 45px" onclick="resetVals()">Reset Values to Our Universe</button>
+				<button style="width: 48%;font-weight: bold;font-size: 100%;height: 45px" onclick="runSim()">Run Simulation</button>
 			</div>
             <br/>
 			<div id="myChart" width="600" height="400"></div>
