@@ -12,7 +12,7 @@
 				background-color: gainsboro
 			}
             
-            td {
+            .title {
                 padding: 10px;
                 vertical-align: middle;
             }
@@ -20,71 +20,96 @@
             img {
                 height: 4em;
             }
+            
+            .main_table {
+                width: 97%;
+                border-collapse: collapse;
+                margin: 0px auto;
+            }
+            
+            .main_td {
+                width: 50%;
+                padding: 30px;
+                padding-top: 0px;
+                vertical-align: top;
+                border: 1px solid darkgrey;
+            }
 		</style>
 	</head>
 	<body>
-        <table>
+        <table style="margin: 0px auto;">
             <tr>
-                <td><img src="icon.jpg"/></td>
-                <td><h1> Beta Decay - Table of Contents</h1></td>
+                <td class="title"><img src="icon.jpg"/></td>
+                <td class="title"><h1> Beta Decay - Table of Contents</h1></td>
             </tr>
         </table>
-        <h2>Links</h2>
-        <ul>
-            <li><h4><a href="https://github.com/beta-decay">Github</a></h4></li>
-            <li><h4><a href="https://twitter.com/BetaDecay101">Twitter</a></h4></li>
-            <li><h4><a href="https://stackexchange.com/users/3244989/beta-decay">Stack Exchange</a></h4></li>
-            <li><h4><a href="https://apps.getpebble.com/en_US/developer/53bc5610db5c3bc8f8000016/1">Pebble Developer Page</a></h4></li>
-        </ul>
-        <h2>Programming and Simulations</h2>
-		<h3><a href="./editor">FourIDE: An IDE for Fourier</a></h3>
-		<h4>Features</h4>
-		<ul>
-			<li>Function reference</li>
-			<li>Byte counting of code</li>
-			<li>Permalinking</li>
-		</ul>
-		<h3><a href="./noether">Noether: A Stack Based Fourier</a></h3>
-		<h4>Features</h4>
-		<ul>
-			<li>Overloading of functions</li>
-			<li>String operations</li>
-			<li>Functions with pratical use</li>
-		</ul>
-        <h3><a href="./friedmann">Friedmann Simulation: A simulation of the expansion of the universe</a></h3>
-		<h4>Features</h4>
-		<ul>
-			<li>Set your own density parameters</li>
-			<li>Visualisation of the radius of the universe against time</li>
-			<li>Interactive graph with plot.ly</li>
-		</ul>
-        
-        <h2>Pebble Apps</h2>
-		<h3><a href="https://apps.getpebble.com/en_US/application/57aa2b6e693f7ebd70000024">Hygiene Checker: An interface for the Food Hygiene API</a></h3>
-		<h4>Features</h4>
-		<ul>
-			<li>Get local food hygiene information</li>
-			<li>Search for locations throughout the UK using search bar</li>
-			<li>Last inspection dates are listed</li>
-		</ul>
-        <h3><a href="https://apps.getpebble.com/en_US/application/595a5946b67f9f9e8100187e">Yelper: A Yelp Client for the Pebble Smartwatch</a></h3>
-        <h4>Features</h4>
-        <ul>
-            <li>Voice search for local businesses</li>
-            <li>Pre-defined categories for quick access</li>
-            <li>Read reviews of the establishments</li>
-        </ul>
-        
-        <h3><a href="https://apps.getpebble.com/en_US/application/57a207735985e1543c00000e">Wikipebble: A Wikipedia browser for your wrist</a></h3>
-        <h4>Features</h4>
-        <ul>
-            <li>Voice or Tertiary Keyboard search</li>
-            <li>View the daily featured article</li>
-            <li>Random article</li>
-            <li>Multiple languages (English, French, German, Spanish, Portuguese and Simple)</li>
-            <li>See also links</li>
-        </ul>
-        
-        <h4><a href="https://apps.getpebble.com/en_US/developer/53bc5610db5c3bc8f8000016/1">More apps can found on my developer page.</a></h4>
+        <table class="main_table">
+            <tr class="main_tr">
+                <td class="main_td">
+                    <h2>Links</h2>
+                    <ul>
+                        <li><h4><a href="https://github.com/beta-decay">Github</a></h4></li>
+                        <li><h4><a href="https://twitter.com/BetaDecay101">Twitter</a></h4></li>
+                        <li><h4><a href="https://stackexchange.com/users/3244989/beta-decay">Stack Exchange</a></h4></li>
+                        <li><h4><a href="https://apps.getpebble.com/en_US/developer/53bc5610db5c3bc8f8000016/1">Pebble Developer Page</a></h4></li>
+                    </ul>
+                <td/>
+                <td class="main_td" rowspan="2">
+                    <h2>Programming and Simulations</h2>
+                    <h3><a href="./editor">FourIDE: An IDE for Fourier</a></h3>
+                    <h4>Features</h4>
+                    <ul>
+                        <li>Function reference</li>
+                        <li>Byte counting of code</li>
+                        <li>Permalinking</li>
+                    </ul>
+                    <h3><a href="./noether">Noether: A Stack Based Fourier</a></h3>
+                    <h4>Features</h4>
+                    <ul>
+                        <li>Overloading of functions</li>
+                        <li>String operations</li>
+                        <li>Functions with pratical use</li>
+                    </ul>
+                    <h3><a href="./friedmann">Friedmann Simulation: A simulation of the expansion of the universe</a></h3>
+                    <h4>Features</h4>
+                    <ul>
+                        <li>Set your own density parameters</li>
+                        <li>Visualisation of the radius of the universe against time</li>
+                        <li>Interactive graph with plot.ly</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="main_tr">
+                <td class="main_td">
+                <h2>Pebble Apps</h2>
+                <h3><a href="https://apps.getpebble.com/en_US/application/57aa2b6e693f7ebd70000024">Hygiene Checker: An interface for the Food Hygiene API</a></h3>
+                <h4>Features</h4>
+                <ul>
+                    <li>Get local food hygiene information</li>
+                    <li>Search for locations throughout the UK using search bar</li>
+                    <li>Last inspection dates are listed</li>
+                </ul>
+                <h3><a href="https://apps.getpebble.com/en_US/application/595a5946b67f9f9e8100187e">Yelper: A Yelp Client for the Pebble Smartwatch</a></h3>
+                <h4>Features</h4>
+                <ul>
+                    <li>Voice search for local businesses</li>
+                    <li>Pre-defined categories for quick access</li>
+                    <li>Read reviews of the establishments</li>
+                </ul>
+
+                <h3><a href="https://apps.getpebble.com/en_US/application/57a207735985e1543c00000e">Wikipebble: A Wikipedia browser for your wrist</a></h3>
+                <h4>Features</h4>
+                <ul>
+                    <li>Voice or Tertiary Keyboard search</li>
+                    <li>View the daily featured article</li>
+                    <li>Random article</li>
+                    <li>Multiple languages (English, French, German, Spanish, Portuguese and Simple)</li>
+                    <li>See also links</li>
+                </ul>
+
+                <h4><a href="https://apps.getpebble.com/en_US/developer/53bc5610db5c3bc8f8000016/1">More apps can found on my developer page.</a></h4>
+                </td>
+            </tr>
+        </table>
 	</body>
 </html>

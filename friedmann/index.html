@@ -10,11 +10,18 @@
 		<script src="plotly-latest.min.js"></script>
 
 		<style>
+            a:visited {
+                color: #337ab7;
+            }
+            
+            a {
+                
+            }
+            
 			#math {
 				border: 1px solid black;
 				padding: 5px;
 				display: inline-block;
-				font-size: 250%;
 				background-color: white;
 			}
 
@@ -39,7 +46,7 @@
 			#container {
 				padding: 5%;
 				padding-top: 5px;
-				background-color: #9a9a9a;
+				background-color: gainsboro;
 			}
 
 			img {
@@ -77,11 +84,6 @@
             }
 		</style>
 		<script>
-			function eqToImage() {
-				document.getElementById("math").innerHTML = '<img src="./equation2.gif" />';
-				document.getElementById("eqToImage").outerHTML ="";
-			}
-
 			function runSim() {
 				var rad = Number(document.getElementById("rad").value) * Math.pow(10,-5);
 				var mass = Number(document.getElementById("mass").value);
@@ -101,81 +103,13 @@
 	</head>
 	<body>
 		<div id="container">
-			<h1>Universe Simulator</h1>
+            <h1><a href="../">Beta Decay</a> - Universe Simulator</h1>
 			<p>
 				This is program simulates the expansion of your own, custom universe using a variant of the Friedmann Equation shown below:
 			</p>
 			<div id="math">
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
-                    <mrow>
-                        <mfrac linethickness="1">
-                            <mrow>
-                                <msup>
-                                    <mi>H</mi>
-                                    <mn>2</mn>
-                                </msup>
-                            </mrow>
-                            <mrow>
-                                <msubsup>
-                                    <mi>H</mi>
-                                    <mn>0</mn>
-                                    <mn>2</mn>
-                                </msubsup>
-                            </mrow>
-                        </mfrac>
-                        <mo>=</mo>
-                        <msub>
-                            <mi>&#x003A9;</mi>
-                            <mrow>
-                                <mn>0</mn>
-                                <mo>,</mo>
-                                <mi>R</mi>
-                            </mrow>
-                        </msub>
-                        <msup>
-                            <mi>a</mi>
-                            <mn>-4</mn>
-                        </msup>
-                        <mo>+</mo>
-                        <msub>
-                            <mi>&#x003A9;</mi>
-                            <mrow>
-                                <mn>0</mn>
-                                <mo>,</mo>
-                                <mi>M</mi>
-                            </mrow>
-                        </msub>
-                        <msup>
-                            <mi>a</mi>
-                            <mn>-3</mn>
-                        </msup>
-                        <mo>+</mo>
-                        <msub>
-                            <mi>&#x003A9;</mi>
-                            <mrow>
-                                <mn>0</mn>
-                                <mo>,</mo>
-                                <mi>k</mi>
-                            </mrow>
-                        </msub>
-                        <msup>
-                            <mi>a</mi>
-                            <mn>-2</mn>
-                        </msup>
-                        <mo>+</mo>
-                        <msub>
-                            <mi>&#x003A9;</mi>
-                            <mrow>
-                                <mn>0</mn>
-                                <mo>,</mo>
-                                <mi>&#x0039B;</mi>
-                            </mrow>
-                        </msub>
-                    </mrow>
-                </math>
+				<img src="./equation2.gif"/>
 			</div>
-			<br/>
-			<em id="eqToImage" style="font-size:85%">Equation not displaying properly? <a href="javascript:eqToImage()">Click here</a></em>
 			<p>
                 This equation can be used to calculate the value of <em class="inline-math">a</em>, the scale factor of the universe. Here, <em class="inline-math">r(t) = a(t) &times; r<sub>0</sub></em> where <em class="inline-math">r(t)</em> is the radius of the universe at time <em class="inline-math">t</em> and <em class="inline-math">r<sub>0</sub></em> is the radius of the universe today.
 			</p>
