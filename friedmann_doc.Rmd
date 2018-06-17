@@ -1,0 +1,58 @@
+---
+title: "Friedmann Equation"
+output: html_notebook
+runtime: shiny
+---
+
+The Friedmann Equation is one of the most important equations in cosmology. It is a solution of the Einstein Field Equations of General Relativity for the entire universe. Derived by the Russian priest Alexandr Friedmann, it describes how the size of the universe changes over time and how it depends on the energy and mass of the universe. One form is shown below:
+
+$$\frac{H^2}{H_0^2} = \Omega_{0,R} a^{-4} + \Omega_{0,M} a^{-3} + \Omega_{0,k} a^{-2} + \Omega_{0,\Lambda}$$
+The main term of this equation is $a$, the scale factor. This is a measure of the number times bigger the universe is than it is today, and can found found as: $a(t) = \frac{r(t)}{r_0}$, where $r_0$ is the current radius of the universe.
+
+On the left hand side is the Hubble parameter. This is the same as the Hubble constant, $H_0$ and describes how quickly the universe is expanding. It can be represented as $H = \frac{\dot{a}}{a}$. On the right hand side are the various density parameters for our universe: $\Omega_{0,R}$ is the current radiation density parameter, $\Omega_{0,M}$ is the current mass density parameter and $\Omega_{0,\Lambda}$ is the current vacuum density parameter (dark energy). These determine how the universe expands.
+
+$\Omega_{0,k}$ is the parameter which determines the shape of the universe: is it spherical, flat or hyperbolic? It can found as $\Omega_{0,k} = 1 - (\Omega_{0,R} + \Omega_{0,M} + \Omega_{0,\Lambda})$. When $\Omega_{0,k} = 0$, the universe it flat, when $\Omega_{0,k} < 0$, the universe is spherical and when $\Omega_{0,k} > 0$ the universe is hyperbolic.
+
+The graph below solves the Friedmann equation numerically and can be used to see how the universe changes with different density parameters. 
+
+```{r, echo = FALSE}
+numericInput("R", "Current Radiation Density Parameter?", 0, step=0.1)
+numericInput("M", "Current Mass Density Parameter?", 0.7, step=0.1)
+numericInput("L", "Current Vacuum Density Parameter?", 0.3, step=0.1)
+
+renderPlot({
+  ## Using the `deSolve` package
+  library(deSolve)
+  library(ggplot2)
+  library(ggthemes)
+  ## Time
+  t <- seq(0.0001, 25, 0.01)
+  
+  ## Initial values
+  R = input$R
+  M = input$M
+  L = input$L
+  
+  K = 1 - R - M - L
+  
+  H0 = 0.07
+  
+  ## Parameter values
+  params <- list(H0 = H0, R=R, M=M, L=L, K=K)
+  
+  ## The logistic equation
+  fn <- function(t, a, params) with(params, list(H0 * sqrt(R*a^-2 + M*a^-1 + K + L*a^2)))
+  
+ 
+  ## Solving and plotin the solution numerically
+  out <- ode(0.0001, t, fn, params)
+  outdf=as.data.frame(out)
+  
+  ggplot(data=outdf, aes(x=t,y=outdf[2])) + geom_rangeframe() + geom_line(size=1) + xlab(label="Time since Big Bang /Gigayears") + ylab(label="Scale Factor") + theme_tufte() + theme(text = element_text(size=20))
+  
+}, height=500)
+```
+
+Made with R and Shiny.
+
+[Return to Home](https://beta-decay.github.io)
