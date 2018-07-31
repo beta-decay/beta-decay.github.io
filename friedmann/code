@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html>
+<head>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<title>Exported from Notepad++</title>
+<style type="text/css">
+span {
+	font-family: 'Courier New';
+	font-size: 10pt;
+	color: #E0E2E4;
+}
+.sc0 {
+}
+.sc1 {
+	color: #66747B;
+}
+.sc2 {
+	color: #FFCD22;
+}
+.sc3 {
+	color: #EC7600;
+}
+.sc4 {
+	color: #FF8409;
+}
+.sc5 {
+	font-weight: bold;
+	color: #93C763;
+}
+.sc10 {
+	color: #E8E2B7;
+}
+.sc11 {
+}
+</style>
+</head>
+<body>
+<div style="float: left; white-space: pre; line-height: 1; background: #293134; "><span class="sc5">from</span><span class="sc0"> </span><span class="sc11">gravipy</span><span class="sc0"> </span><span class="sc5">import</span><span class="sc0"> </span><span class="sc10">*</span><span class="sc0">
+
+</span><span class="sc1"># Define variables</span><span class="sc0">
+</span><span class="sc11">t</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">r</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">theta</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">phi</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">symbols</span><span class="sc10">(</span><span class="sc4">'t, r, \\theta, \phi'</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc11">a</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">Function</span><span class="sc10">(</span><span class="sc3">"a"</span><span class="sc10">)(</span><span class="sc11">t</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">Coordinates</span><span class="sc10">(</span><span class="sc4">'\chi'</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc10">[</span><span class="sc11">t</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">r</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">theta</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">phi</span><span class="sc10">])</span><span class="sc0">
+</span><span class="sc11">k</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">Symbol</span><span class="sc10">(</span><span class="sc3">"k"</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc1"># Define the Metric Tensor</span><span class="sc0">
+</span><span class="sc11">Metric</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">diag</span><span class="sc10">(-</span><span class="sc2">1</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">a</span><span class="sc10">**</span><span class="sc2">2</span><span class="sc10">/(</span><span class="sc2">1</span><span class="sc10">-</span><span class="sc11">k</span><span class="sc10">*</span><span class="sc11">r</span><span class="sc10">**</span><span class="sc2">2</span><span class="sc10">),</span><span class="sc0"> </span><span class="sc11">a</span><span class="sc10">**</span><span class="sc2">2</span><span class="sc0"> </span><span class="sc10">*</span><span class="sc0"> </span><span class="sc11">r</span><span class="sc10">**</span><span class="sc2">2</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">a</span><span class="sc10">**</span><span class="sc2">2</span><span class="sc0"> </span><span class="sc10">*</span><span class="sc0"> </span><span class="sc11">r</span><span class="sc10">**</span><span class="sc2">2</span><span class="sc10">*</span><span class="sc11">sin</span><span class="sc10">(</span><span class="sc11">theta</span><span class="sc10">)**</span><span class="sc2">2</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc11">g</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">MetricTensor</span><span class="sc10">(</span><span class="sc4">'g'</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">Metric</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc1"># Calculate the Ricci Tensor</span><span class="sc0">
+</span><span class="sc11">Ri</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">Ricci</span><span class="sc10">(</span><span class="sc3">"Ri"</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc1"># Calculate the Einstein Tensor</span><span class="sc0">
+</span><span class="sc11">G</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">Einstein</span><span class="sc10">(</span><span class="sc3">"G"</span><span class="sc10">,</span><span class="sc11">Ri</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc1"># Print the 00 component of the Einstein Tensor</span><span class="sc0">
+</span><span class="sc5">print</span><span class="sc10">(</span><span class="sc11">G</span><span class="sc10">(</span><span class="sc2">0</span><span class="sc10">,</span><span class="sc2">0</span><span class="sc10">))</span></div></body>
+</html>
