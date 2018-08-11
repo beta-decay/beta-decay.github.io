@@ -2063,6 +2063,7 @@ function drawBot(x, y, color, name) {
 
 function updateCanvas() { 
 	context.clearRect(0, 0, canvas.width, canvas.height) 
+	context.beginPath()
 	for (var i = 0; i < arenaSize; i++)
 	{
 		context.moveTo(i * squareSize, 0);
@@ -2072,6 +2073,7 @@ function updateCanvas() {
 	}
 	context.strokeStyle = '#dddddd';
 	context.stroke();
+	context.closePath()
 	for (var i = 1; i < coinLocations.length; i++)
 		drawCircle(coinLocations[i][0], coinLocations[i][1], '#b4b4b4') 
 	drawCircle(coinLocations[0][0], coinLocations[0][1], '#ffd700') 
