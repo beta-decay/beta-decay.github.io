@@ -2020,7 +2020,7 @@ function resetEverything()
 			"<p>Rounds: <input id=rounds value=200 size=5> FPS: <input id=fps value=5 size=5> Games: <input id=games value='' size=5></p>"+
 			"<p><input type='button' id=initButton value='Init' onclick='initCanvas()'> <input type=button id=startButton disabled value='Start' onclick='startGame()'> <input type='button' id=pauseButton disabled value='Pause' onclick='pauseGame()'> <input type=button id=stepButton disabled value=Step onclick='runMoves()'> <input type=button value=Tournament id=tournament onclick='startTournament()'></p></div>"+
 			"<div style='float: left'> <table id='leaderboard'>"+
-				"<tr><th>C<th>Name<th>Rank<th>Ate*<th>ME†<th>Eaten<th>Fled<th>Score<th>Wins"+
+				"<tr><th>C<th>Name<th>Rank<th>Ate*<th>ME†<th>Eaten<th>Fled<th>Score<th>Wins<th>Track?"+
 			"</table><p>*: Number of bots eaten by the bot (and coins earned from that).<br>†: Number of mutual eatings in which the bot participated.</p></div>"+
 		"<div style='clear: both'>"+
 			"<h1 id='EventLogCaption'>Event Log</h1>"+
@@ -2045,17 +2045,20 @@ function drawCircle(x, y, color) {
 	context.lineWidth = '1'; 
 	context.strokeStyle = '#000000'; 
 	context.stroke(); 
+	context.closePath()
 } 
 
-function drawBot(x, y, color) { 
+function drawBot(x, y, color, name) { 
 	var lowX = x * squareSize 
 	var lowY = y * squareSize 
-	context.lineWidth = 1 
-	context.strokeStyle = '#000000'; 
+	context.beginPath()
+	context.lineWidth = document.getElementById(name+"_checkbox").checked ? 4:1
+	context.strokeStyle = document.getElementById(name+"_checkbox").checked ? '#ff0000':'#000000'
 	context.rect(lowX+.5, lowY+.5, squareSize-1, squareSize-1); 
-	context.stroke() 
+	context.stroke()
 	context.fillStyle = color; 
 	context.fillRect(lowX+1, lowY+1, squareSize-2, squareSize-2); 
+	context.closePath()
 } 
 
 function updateCanvas() { 
@@ -2074,7 +2077,7 @@ function updateCanvas() {
 	drawCircle(coinLocations[0][0], coinLocations[0][1], '#ffd700') 
 	for (var i = 0; i < botPos.length; i++)
 		if (botPos[i][0] > -2)
-			drawBot(botPos[i][0], botPos[i][1], botData[i].color ? botData[i].color : '#ff0000') 
+			drawBot(botPos[i][0], botPos[i][1], botData[i].color ? botData[i].color : '#ff0000', botData[i].name) 
 } 
 
 function createLeaderboard() { 
@@ -2089,7 +2092,8 @@ function createLeaderboard() {
 		var newMutual = document.createElement('td') 
 		var newFlights = document.createElement('td') 
 		var newScore = document.createElement('td') 
-		var newWins = document.createElement('td') 
+		var newWins = document.createElement('td')
+		var track = document.createElement('td')
 		newRow.id = botData[i].name + 'Row' 
 		newColor.id = botData[i].name + 'Color' 
 		newName.id = botData[i].name + 'Name' 
@@ -2099,8 +2103,10 @@ function createLeaderboard() {
 		newMutual.id = botData[i].name + 'Mutual' 
 		newFlights.id = botData[i].name + 'Flights' 
 		newScore.id = botData[i].name + 'Score' 
-		newWins.id = botData[i].name + 'Wins' 
+		newWins.id = botData[i].name + 'Wins'
+		track.id = botData[i].name + 'Track'
 		newName.innerHTML = botData[i]['name'] 
+		track.innerHTML = "<input type=\"checkbox\" id=\""+botData[i].name+"_checkbox\">"
 		newRow.appendChild(newColor) 
 		newRow.appendChild(newName) 
 		newRow.appendChild(newPlace) 
@@ -2110,6 +2116,7 @@ function createLeaderboard() {
 		newRow.appendChild(newFlights) 
 		newRow.appendChild(newScore) 
 		newRow.appendChild(newWins) 
+		newRow.appendChild(track)
 		table.appendChild(newRow) 
 	} 
 } 
