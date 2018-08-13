@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Art Attack KoTH</title>
+		<style>
+		@font-face {
+			font-family: ubuntu;
+   			src: url(Ubuntu-R.ttf);
+		}
+
+		@font-face {
+			font-family: ubuntu;
+   			src: url(Ubuntu-B.ttf);
+   			font-weight: bold;
+		}
+
+		@font-face {
+			font-family: ubuntu;
+   			src: url(Ubuntu-RI.ttf);
+   			font-style: italic;
+		}
+
+		body {
+			background-color: #000000;
+			font-family: ubuntu;
+			color: #ffffff;
+			padding: 20px;
+		}
+
+		canvas {
+			background-color: #ffffff;
+		}
+
+		button {
+			padding-top: 5px;
+			padding-bottom: 5px;
+			padding-left: 20px;
+			padding-right: 20px;
+			border-radius: 5px;
+			font-weight: bold;
+		}
+		</style>
+		<script src="botData.js"></script>
+		<script src="controller.js"></script>
+	</head>
+	<body>
+		<h1>Art Attack - King of the Hill challenge</h1>
+		<h3>Round <span id="roundNum">0</span></h3>
+		<canvas id="playWindow" width=10000 height=10000></canvas>
+		<br/><br/>
+		<button onclick="javascript:runGame()">Run Game</button>&nbsp;&nbsp;<button onclick="javascript:stopGame()">Stop Game</button>&nbsp;&nbsp;<button onclick="javascript:initialise()">Reset Game</button>
+		<br/><br/>
+		<table>
+			<tr>
+				<td><strong>Game Length: </strong></td><td><input type="text" id="gameInput" value="200"></td>
+			</tr>
+			<tr>
+				<td><strong>FPS: </strong></td><td><input type="text" id="fpsInput" value="5"></td>
+			</tr>
+		</table>
+	</body>
+</html>
