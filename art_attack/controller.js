@@ -5,11 +5,30 @@ var maxRounds = 200;
 var turnNumber = 1;
 var interval;
 
+Array.prototype.shuffle = function() {
+  var i = this.length, j, temp;
+  if ( i == 0 ) return this;
+  while ( --i ) {
+     j = Math.floor( Math.random() * ( i + 1 ) );
+     temp = this[i];
+     this[i] = this[j];
+     this[j] = temp;
+  }
+  return this;
+}
+
 function runBots() {
+	var bots_array = [];
+
+	for (var j = 0; j < botData.length; j++) {
+		bots_array.push(botData[j].uid, botData[j].x, botData[j].y)
+	}
+
 	for (var i = 0; i < botData.length; i++) {
 		var uid =  botData[i].uid;
+		var position = [botData[i].x, botData[i].y];
 
-		var response = botData[i].func(uid, grid).split(":");
+		var response = botData[i].func(position, uid, grid, bots_array).split(":");
 
 		if (response[1] == "up") {
 			botData[i].y -= 1;
@@ -187,6 +206,7 @@ function stopGame() {
 
 function initialise() {
 	grid = [];
+	botData = botData.shuffle();
 
 	for (var i = 0; i < arenaSize; i++) {
 		grid.push([]);
@@ -198,6 +218,8 @@ function initialise() {
 
 	var previous_x = [];
 	var previous_y = [];
+
+	document.getElementById("botColoursHere").innerHTML = "";
 
 	for (var k = 0; k < botData.length; k++) {
 		do {
@@ -213,6 +235,8 @@ function initialise() {
 		botData[k].uid = k+1;
 
 		grid[botData[k].x][botData[k].y] = botData[k].uid;
+
+		document.getElementById("botColoursHere").innerHTML += "<li><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name+"</span></li>";
 	}
 
 	drawGrid();

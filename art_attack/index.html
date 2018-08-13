@@ -39,6 +39,14 @@
 			border-radius: 5px;
 			font-weight: bold;
 		}
+
+		#colourKey {
+			padding: 30px;
+		}
+
+		li {
+		    margin: 10px 0;
+		}
 		</style>
 		<script src="botData.js"></script>
 		<script src="controller.js"></script>
@@ -46,7 +54,12 @@
 	<body>
 		<h1>Art Attack - King of the Hill challenge</h1>
 		<h3>Round <span id="roundNum">0</span></h3>
-		<canvas id="playWindow" width=10000 height=10000></canvas>
+		<table>
+				<tr>
+						<td><canvas id="playWindow" width=10000 height=10000></canvas></td>
+						<td id="colourKey"><h2>Colour Key:</h2><ul id="botColoursHere"></ul></td>
+				</tr>
+		</table>
 		<br/><br/>
 		<button onclick="javascript:runGame()">Run Game</button>&nbsp;&nbsp;<button onclick="javascript:stopGame()">Stop Game</button>&nbsp;&nbsp;<button onclick="javascript:initialise()">Reset Game</button>
 		<br/><br/>
