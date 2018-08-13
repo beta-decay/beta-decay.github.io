@@ -121,7 +121,7 @@ function drawGrid() {
 	ctx.lineWidth = 1;
 	for (var x = 0; x < canvas.width; x+=20) {
 		ctx.beginPath();
-		ctx.strokeStyle = "#AAAAAA";
+		ctx.strokeStyle = "#DDDDDD";
 		ctx.moveTo(x,0);
 		ctx.lineTo(x, canvas.width);
 		ctx.stroke();
@@ -130,7 +130,7 @@ function drawGrid() {
 
 	for (var y = 0; y < canvas.width; y+=20) {
 		ctx.beginPath();
-		ctx.strokeStyle = "#AAAAAA";
+		ctx.strokeStyle = "#DDDDDD";
 		ctx.moveTo(0,y);
 		ctx.lineTo(canvas.height, y);
 		ctx.stroke();
@@ -205,6 +205,8 @@ function stopGame() {
 }
 
 function initialise() {
+	document.getElementById("roundNum").innerHTML = "0";
+
 	grid = [];
 	botData = botData.shuffle();
 
