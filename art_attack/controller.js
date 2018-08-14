@@ -167,8 +167,14 @@ function findArea() {
 function findWinner() {
 	var count_array = findArea();
 
-	var maxArea = Math.max.apply(null, count_array);
+	for (var n = 0; n < count_array.length; n++) {
+		if (count_array[n] === undefined) {
+			count_array[n] = 0;
+		}
+	}
 
+	var maxArea = Math.max.apply(null, count_array);
+	
 	var message = "";
 	var end = " wins!"
 	for (var i = 0; i < count_array.length; i++) {
