@@ -25,44 +25,54 @@ function runBots() {
 	}
 
 	for (var i = 0; i < botData.length; i++) {
-		var uid =  botData[i].uid;
-		var position = [botData[i].x, botData[i].y];
+		if (!botData[i].eliminated) {
+			var uid =  botData[i].uid;
+			var position = [botData[i].x, botData[i].y];
 
-		var response = botData[i].func(position, uid, grid, bots_array).split(":");
+			var response = botData[i].func(position, uid, grid, bots_array).split(":");
 
-		if (response[1] == "up") {
-			botData[i].y -= 1;
+			if (response[1] == "up") {
+				botData[i].y -= 1;
 
-			if (botData[i].y == -1) {
-				// Prevent bot from leaving arena
-				botData[i].y = 0
+				if (botData[i].y == -1) {
+					// Prevent bot from leaving arena
+					botData[i].y = 0
+				}
+			} else if (response[1] == "down") {
+				botData[i].y += 1;
+
+				if (botData[i].y == arenaSize) {
+					// Prevent bot from leaving arena
+					botData[i].y = arenaSize-1;
+				}
+			} else if (response[1] == "left") {
+				botData[i].x += 1;
+
+				if (botData[i].x == arenaSize) {
+					// Prevent bot from leaving arena
+					botData[i].x = arenaSize-1;
+				}
+			}  else if (response[1] == "right") {
+				botData[i].x -= 1;
+
+				if (botData[i].x == -1) {
+					// Prevent bot from leaving arena
+					botData[i].x = 0;
+				}
 			}
-		} else if (response[1] == "down") {
-			botData[i].y += 1;
 
-			if (botData[i].y == arenaSize) {
-				// Prevent bot from leaving arena
-				botData[i].y = arenaSize-1;
-			}
-		} else if (response[1] == "left") {
-			botData[i].x += 1;
-
-			if (botData[i].x == arenaSize) {
-				// Prevent bot from leaving arena
-				botData[i].x = arenaSize-1;
-			}
-		}  else if (response[1] == "right") {
-			botData[i].x -= 1;
-
-			if (botData[i].x == -1) {
-				// Prevent bot from leaving arena
-				botData[i].x = 0;
+			if (response[0] == "pd") {
+				// Bot's pen is down
+				grid[botData[i].x][botData[i].y] = botData[i].uid;
 			}
 		}
+	}
 
-		if (response[0] == "pd") {
-			// Bot's pen is down
-			grid[botData[i].x][botData[i].y] = botData[i].uid;
+	var count_array = findArea();
+
+	for (var j = 0; j < count_array.length; j++) {
+		if (count_array[j] <= 1 && turnNumber >= 5) {
+			botData[j].eliminated = true;
 		}
 	}
 }
@@ -75,7 +85,7 @@ function colourGrid() {
 		for (var y = 0; y < arenaSize; y++) {
 			ctx.beginPath();
 
-			if (grid[x][y] == 0) {
+			if (grid[x][y] == 0 || (botData[grid[x][y]-1].eliminated)) {
 				ctx.fillStyle = "#FFFFFF";
 			} else {
 				ctx.fillStyle = botData[grid[x][y]-1].colour;
@@ -92,20 +102,22 @@ function drawBots() {
 	var ctx = canvas.getContext("2d");
 
 	for (var i = 0; i < botData.length; i++) {
-		ctx.beginPath();
-		ctx.fillStyle = "#000";
+		if (!botData[i].eliminated) {
+			ctx.beginPath();
+			ctx.fillStyle = "#000";
 
-		var xpos = botData[i].x*20;
-		var ypos = botData[i].y*20;
+			var xpos = botData[i].x*20;
+			var ypos = botData[i].y*20;
 
-		ctx.fillRect(xpos, ypos, 20, 20);
-		ctx.closePath();
+			ctx.fillRect(xpos, ypos, 20, 20);
+			ctx.closePath();
 
-		ctx.beginPath();
-		ctx.fillStyle = botData[i].colour;
+			ctx.beginPath();
+			ctx.fillStyle = botData[i].colour;
 
-		ctx.fillRect(xpos+2, ypos+2, 16, 16);
-		ctx.closePath();
+			ctx.fillRect(xpos+2, ypos+2, 16, 16);
+			ctx.closePath();
+		}
 	}
 }
 
@@ -138,7 +150,7 @@ function drawGrid() {
 	}
 }
 
-function findWinner() {
+function findArea() {
 	var count_array = new Array(botData.length);
 
 	for (var x = 0; x < arenaSize; x++) {
@@ -149,12 +161,18 @@ function findWinner() {
 		}
 	}
 
+	return count_array;
+}
+
+function findWinner() {
+	var count_array = findArea();
+
 	var maxArea = Math.max.apply(null, count_array);
 
 	var message = "";
 	var end = " wins!"
 	for (var i = 0; i < count_array.length; i++) {
-		if (count_array[i] == maxArea) {
+		if (count_array[i] == maxArea && !botData[i].eliminated) {
 			var name = botData[i].name;
 			var colour = botData[i].colour;
 
@@ -172,6 +190,19 @@ function findWinner() {
 	document.getElementById("roundNum").innerHTML += " - "+message;
 }
 
+function updateBoard() {
+	document.getElementById("inPlayHere").innerHTML = "";
+	document.getElementById("eliminatedHere").innerHTML = "";
+
+	for (var k = 0; k < botData.length; k++) {
+		if (botData[k].eliminated) {
+			document.getElementById("eliminatedHere").innerHTML += "<li><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name+"</span></li>";
+		} else {
+			document.getElementById("inPlayHere").innerHTML += "<li><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name+"</span></li>";
+		}
+	}
+}
+
 function doStuff() {
 	turnNumber++;
 
@@ -183,6 +214,7 @@ function doStuff() {
 	drawGrid();
 	colourGrid();
 	drawBots();
+	updateBoard();
 
 	document.getElementById("roundNum").innerHTML = turnNumber;
 
@@ -221,8 +253,6 @@ function initialise() {
 	var previous_x = [];
 	var previous_y = [];
 
-	document.getElementById("botColoursHere").innerHTML = "";
-
 	for (var k = 0; k < botData.length; k++) {
 		do {
 			botData[k].x = Math.floor(Math.random()*arenaSize);
@@ -235,12 +265,12 @@ function initialise() {
 
 		botData[k].colour = CSS_COLOR_NAMES[k];
 		botData[k].uid = k+1;
+		botData[k].eliminated = false;
 
 		grid[botData[k].x][botData[k].y] = botData[k].uid;
-
-		document.getElementById("botColoursHere").innerHTML += "<li><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name+"</span></li>";
 	}
 
+	updateBoard();
 	drawGrid();
 	drawBots();
 }
