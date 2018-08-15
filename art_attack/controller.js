@@ -29,30 +29,30 @@ function runBots() {
 			var uid =  botData[i].uid;
 			var position = [botData[i].x, botData[i].y];
 
-			var response = botData[i].func(position, uid, grid, bots_array).split(":");
+			var response = botData[i].func(position, uid, grid, bots_array);
 
-			if (response[1] == "up") {
+			if (response == "up") {
 				botData[i].y -= 1;
 
 				if (botData[i].y == -1) {
 					// Prevent bot from leaving arena
 					botData[i].y = 0
 				}
-			} else if (response[1] == "down") {
+			} else if (response == "down") {
 				botData[i].y += 1;
 
 				if (botData[i].y == arenaSize) {
 					// Prevent bot from leaving arena
 					botData[i].y = arenaSize-1;
 				}
-			} else if (response[1] == "left") {
+			} else if (response == "left") {
 				botData[i].x += 1;
 
 				if (botData[i].x == arenaSize) {
 					// Prevent bot from leaving arena
 					botData[i].x = arenaSize-1;
 				}
-			}  else if (response[1] == "right") {
+			}  else if (response == "right") {
 				botData[i].x -= 1;
 
 				if (botData[i].x == -1) {
@@ -61,9 +61,14 @@ function runBots() {
 				}
 			}
 
-			if (response[0] == "pd") {
-				// Bot's pen is down
-				grid[botData[i].x][botData[i].y] = botData[i].uid;
+			grid[botData[i].x][botData[i].y] = botData[i].uid;
+		}
+	}
+
+	for (var a = 0; a < botData.length; a++) {
+		for (var b = 0; b < botData.length; b++) {
+			if (!botData[a].eliminated && !botData[b].eliminated && botData[a] != botData[b] && botData[a].x == botData[b].x && botData[a].y == botData[b].y) {
+				grid[botData[a].x][botData[a].y] = [0, botData[a].uid, botData[b].uid][(botData[a].uid + botData[b].uid)%3];
 			}
 		}
 	}
