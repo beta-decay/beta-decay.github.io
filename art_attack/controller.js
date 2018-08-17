@@ -27,9 +27,13 @@ function runBots() {
 	for (var i = 0; i < botData.length; i++) {
 		if (!botData[i].eliminated) {
 			var uid =  botData[i].uid;
-			var position = [botData[i].x, botData[i].y];
+			var botself = [uid, botData[i].x, botData[i].y];
 
-			var response = botData[i].func(position, uid, grid, bots_array);
+			var botself_copy = JSON.parse(JSON.stringify(botself));
+			var grid_copy = JSON.parse(JSON.stringify(grid));
+			var bots_array_copy = JSON.parse(JSON.stringify(bots_array));
+
+			var response = botData[i].func(botself_copy, grid_copy, bots_array_copy);
 
 			if (response == "up") {
 				botData[i].y -= 1;
@@ -61,14 +65,18 @@ function runBots() {
 				}
 			}
 
-			grid[botData[i].x][botData[i].y] = botData[i].uid;
+			if (grid[botData[i].x][botData[i].y] > 0) {
+				grid[botData[i].x][botData[i].y] = [botData[i].uid, 0, grid[botData[i].x][botData[i].y]][Math.abs(botData[i].uid-grid[botData[i].x][botData[i].y])%3];
+			} else {
+				grid[botData[i].x][botData[i].y] = botData[i].uid;
+			}
 		}
 	}
 
 	for (var a = 0; a < botData.length; a++) {
 		for (var b = 0; b < botData.length; b++) {
 			if (!botData[a].eliminated && !botData[b].eliminated && botData[a] != botData[b] && botData[a].x == botData[b].x && botData[a].y == botData[b].y) {
-				grid[botData[a].x][botData[a].y] = [0, botData[a].uid, botData[b].uid][(botData[a].uid + botData[b].uid)%3];
+				grid[botData[a].x][botData[a].y] = 0;
 			}
 		}
 	}
