@@ -72,5 +72,20 @@
 				<td><strong>FPS: </strong></td><td><input type="text" id="fpsInput" value="5"></td>
 			</tr>
 		</table>
-	</body>
+
+		<br/><hr>
+
+		<h2>Add your own bot to the game:</h2>
+
+		<em>Note that this is not permanent and should only be used for testing</em><br/><br/>
+		<strong>Name: </strong><input type="text" id="newBotNameInput" value="">
+		<br/><br/>
+		<strong>Code:</strong><br/><br/>
+		<textarea id="newBotCodeInput" rows=10 cols=80 style="padding:10px;font-style:monospace">function(myself, grid, bots, gameInfo) {
+    // Code here
+    return move;
+}</textarea>
+		<br/><br/>
+		<button onclick="javascript:addNewBot()">Add and run</button>
+		</body>
 </html>

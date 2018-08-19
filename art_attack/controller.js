@@ -28,12 +28,14 @@ function runBots() {
 		if (!botData[i].eliminated) {
 			var uid =  botData[i].uid;
 			var botself = [uid, botData[i].x, botData[i].y];
+			var gameInfo = [turnNumber, maxRounds];
 
 			var botself_copy = JSON.parse(JSON.stringify(botself));
 			var grid_copy = JSON.parse(JSON.stringify(grid));
 			var bots_array_copy = JSON.parse(JSON.stringify(bots_array));
+			var gameInfo_copy = JSON.parse(JSON.stringify(gameInfo));
 
-			var response = botData[i].func(botself_copy, grid_copy, bots_array_copy);
+			var response = botData[i].func(botself_copy, grid_copy, bots_array_copy, gameInfo_copy);
 
 			if (response == "up") {
 				botData[i].y -= 1;
@@ -49,14 +51,14 @@ function runBots() {
 					// Prevent bot from leaving arena
 					botData[i].y = arenaSize-1;
 				}
-			} else if (response == "left") {
+			} else if (response == "right") {
 				botData[i].x += 1;
 
 				if (botData[i].x == arenaSize) {
 					// Prevent bot from leaving arena
 					botData[i].x = arenaSize-1;
 				}
-			}  else if (response == "right") {
+			}  else if (response == "left") {
 				botData[i].x -= 1;
 
 				if (botData[i].x == -1) {
@@ -297,3 +299,18 @@ function initialise() {
 document.addEventListener("DOMContentLoaded", function(event) {
     initialise();
  });
+
+function addNewBot() {
+	botName = document.getElementById("newBotNameInput").value;
+	eval("botFunction = "+document.getElementById("newBotCodeInput").value);
+
+	stopGame();
+
+	botData.push({
+		name: botName,
+		func: botFunction
+	});
+
+	initialise();
+	runGame();
+}
