@@ -170,5 +170,65 @@ botData = [
 		        }
 		    }
 		}
+	}, {
+		name: "Candy Button",
+		func: function(myself, grid, bots, gameInfo) {
+		var mc = myself[0];
+		var mx = myself[1];
+		var my = myself[2];
+
+		if(mx==grid.length-1 && my<grid.length-1) return "down";
+		if(my==grid.length-1 && mx>0) return "left";
+		if(mx==0 && my>0) return "up";
+		if(mx==0 && my==0) return "right";
+		if(mx%2){
+		    if(my<grid.length-2) return "down";
+		    return "right";
+		}
+		if(my>0) return "up"
+		return "right";
+		}
+	}, {
+		name: "Near Sighted Greed",
+		func: function(myself, grid, bots, gameInfo) {
+		    let ret = [];
+		    let col = myself[0];
+		    let myX = myself[1];
+		    let myY = myself[2];
+
+		    if(grid[myX][myY] != col){
+		        return "wait";
+		    }
+		    if(myX != 0 && grid[myX-1][myY] != col){
+		        ret.push("up")
+		    }
+		    if(myX != grid.length-1 && grid[myX+1][myY] != col){
+		        ret.push("down")
+		    }
+		    if(myY != 0 && grid[myX][myY-1] != col){
+		        ret.push("left")
+		    }
+		    if(myY != grid[0].length && grid[myX][myY+1] != col){
+		        ret.push("rigth")
+		    }
+		    return ret[Math.random() * ret.length|0]
+		}
+	}, {
+		name: "Random Filler",
+		func: function([id, x, y], grid, bots, gameInfo) {
+		    let painted = {
+		        un: [],
+		        other: [],
+		        me: [],
+		    };
+		    let whose = n => n ? n == id || Math.abs(id - n) % 3 > 1 ? "me" : "other" : "un";
+		    if (x > 0) painted[whose(grid[x - 1][y])].push("left");
+		    if (y > 0) painted[whose(grid[x][y - 1])].push("up");
+		    if (x + 1 < grid.length) painted[whose(grid[x + 1][y])].push("right");
+		    if (y + 1 < grid[x].length) painted[whose(grid[x][y + 1])].push("down");
+		    let moves = painted.un.length ? painted.un : grid[x][y] ? painted.other.length ? painted.other : painted.me : ["wait"];
+		    let move = moves[Math.random() * moves.length | 0];
+		    return move;
+		}
 	}
 ]
