@@ -231,7 +231,7 @@ botData = [
 		    return move;
 		}
 	}, {
-		name: "The Bot That Paints The Board",
+		name: "TBTPTBCBINAP",
 		func: function (me, board, painters, info) {
 		    let id = me[0], meX = me[1], meY = me[2], size = board.length, round = info[0], end = info[1], i;
 
