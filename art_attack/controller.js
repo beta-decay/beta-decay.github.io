@@ -275,9 +275,11 @@ function stopGame() {
 
 function initialise() {
 	stopGame();
+
 	document.getElementById("roundNum").innerHTML = "0";
 	turnNumber = 1;
 	
+	arenaSize = botData.length * 3;
 	grid = [];
 	botData = botData.shuffle();
 
