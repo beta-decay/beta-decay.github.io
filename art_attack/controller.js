@@ -22,7 +22,8 @@ function runBots() {
 	var bots_array = [];
 
 	for (var j = 0; j < botData.length; j++) {
-		bots_array.push([botData[j].uid, botData[j].x, botData[j].y]);
+		if (!botData[j].eliminated)
+			bots_array.push([botData[j].uid, botData[j].x, botData[j].y]);
 	}
 
 	for (var i = 0; i < botData.length; i++) {
