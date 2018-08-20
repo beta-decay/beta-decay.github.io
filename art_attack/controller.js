@@ -217,7 +217,7 @@ function updateBoard() {
 	var scores = findArea();
 
 	for (var k = 0; k < botData.length; k++) {
-		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + scores[k] + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td></tr>";
+		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + (botData[k].eliminated?0:scores[k]) + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td></tr>";
 	}
 }
 
@@ -242,7 +242,6 @@ function doStuff() {
 }
 
 function runGame() {
-	turnNumber = 1;
 	maxRounds = document.getElementById("gameInput").value;
 	var fps = document.getElementById("fpsInput").value;
 
@@ -251,12 +250,12 @@ function runGame() {
 
 function stopGame() {
 	clearInterval(interval);
-	document.getElementById("roundNum").innerHTML = 0;
 }
 
 function initialise() {
 	document.getElementById("roundNum").innerHTML = "0";
-
+	turnNumber = 1;
+	
 	grid = [];
 	botData = botData.shuffle();
 
