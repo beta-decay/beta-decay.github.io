@@ -21,7 +21,7 @@ function runBots() {
 	var bots_array = [];
 
 	for (var j = 0; j < botData.length; j++) {
-		bots_array.push(botData[j].uid, botData[j].x, botData[j].y)
+		bots_array.push([botData[j].uid, botData[j].x, botData[j].y]);
 	}
 
 	for (var i = 0; i < botData.length; i++) {
@@ -212,15 +212,12 @@ function findWinner() {
 }
 
 function updateBoard() {
-	document.getElementById("inPlayHere").innerHTML = "";
-	document.getElementById("eliminatedHere").innerHTML = "";
+	document.getElementById("playerTable").innerHTML = "<tr><td style=\"font-size: 1.5em;font-weight: bold\">Player Name</td><td style=\"font-size: 1.5em;font-weight: bold\">Score</td><td style=\"font-size: 1.5em;font-weight: bold\">Eliminated?</td></tr>";
+
+	var scores = findArea();
 
 	for (var k = 0; k < botData.length; k++) {
-		if (botData[k].eliminated) {
-			document.getElementById("eliminatedHere").innerHTML += "<li><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name+"</span></li>";
-		} else {
-			document.getElementById("inPlayHere").innerHTML += "<li><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name+"</span></li>";
-		}
+		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + scores[k] + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td></tr>";
 	}
 }
 

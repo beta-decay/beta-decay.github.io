@@ -38,6 +38,7 @@
 			padding-right: 20px;
 			border-radius: 5px;
 			font-weight: bold;
+			background-color: gainsboro;
 		}
 
 		.colourKey {
@@ -46,6 +47,17 @@
 
 		li {
 		    margin: 10px 0;
+		}
+
+		#playerTable td {
+			padding: 10px;
+			text-align: center;
+			border: 1px solid white;
+			width: 150px;
+		}
+
+		#playerTable {
+			border-collapse: collapse;
 		}
 		</style>
 		<script src="botData.js"></script>
@@ -57,8 +69,11 @@
 		<table>
 				<tr>
 						<td><canvas id="playWindow" width=10000 height=10000></canvas></td>
-						<td class="colourKey"><h2>In Play:</h2><ul id="inPlayHere"></ul></td>
-						<td class="colourKey"><h2>Eliminated:</h2><ul id="eliminatedHere"></ul></td>
+						<td style="padding:50px">
+							<table id="playerTable">
+								<tr><td>Player Name</td><td>Score</td><td>Eliminated</td></tr>
+							</table>
+						</td>
 				</tr>
 		</table>
 		<br/><br/>
