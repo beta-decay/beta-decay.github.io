@@ -276,6 +276,8 @@ function stopGame() {
 function initialise() {
 	stopGame();
 
+	localStorage.clear();
+
 	document.getElementById("roundNum").innerHTML = "0";
 	turnNumber = 1;
 	
@@ -316,10 +318,6 @@ function initialise() {
 	drawBots();
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    initialise();
- });
-
 function addNewBot() {
 	botName = document.getElementById("newBotNameInput").value;
 	eval("botFunction = "+document.getElementById("newBotCodeInput").value);
@@ -334,3 +332,7 @@ function addNewBot() {
 	initialise();
 	runGame();
 }
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    initialise();
+ });
