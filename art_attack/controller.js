@@ -4,6 +4,7 @@ var arenaSize = botData.length * 3;
 var maxRounds = 200;
 var turnNumber = 1;
 var interval;
+var running = false;
 
 Array.prototype.shuffle = function() {
   var i = this.length, j, temp;
@@ -216,8 +217,23 @@ function updateBoard() {
 
 	var scores = findArea();
 
+	for (var n = 0; n < scores.length; n++) {
+		if (scores[n] === undefined) {
+			scores[n] = 0;
+		}
+	}
+
+	var maxArea = Math.max.apply(null, scores);
+	var winners = [];
+
+	for (var i = 0; i < scores.length; i++) {
+		if (scores[i] == maxArea && !botData[i].eliminated) {
+			winners.push(botData[i].name)
+		}
+	}
+
 	for (var k = 0; k < botData.length; k++) {
-		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + (botData[k].eliminated?0:scores[k]) + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td></tr>";
+		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + (winners.indexOf(botData[k].name)>=0?"*":"") + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + (botData[k].eliminated?0:scores[k]) + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td></tr>";
 	}
 }
 
@@ -225,6 +241,7 @@ function doStuff() {
 	turnNumber++;
 
 	if (turnNumber == maxRounds) {
+		running = false;
 		clearInterval(interval);
 	}
 
@@ -242,17 +259,22 @@ function doStuff() {
 }
 
 function runGame() {
-	maxRounds = document.getElementById("gameInput").value;
-	var fps = document.getElementById("fpsInput").value;
+	if (!running) {
+		maxRounds = document.getElementById("gameInput").value;
+		var fps = document.getElementById("fpsInput").value;
+		running = true;
 
-	interval = setInterval(doStuff, 1/fps * 1000);
+		interval = setInterval(doStuff, 1/fps * 1000);
+	}
 }
 
 function stopGame() {
+	running = false;
 	clearInterval(interval);
 }
 
 function initialise() {
+	stopGame();
 	document.getElementById("roundNum").innerHTML = "0";
 	turnNumber = 1;
 	
