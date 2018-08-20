@@ -230,5 +230,59 @@ botData = [
 		    let move = moves[Math.random() * moves.length | 0];
 		    return move;
 		}
+	}, {
+		name: "The Bot That Paints The Board",
+		func: function (me, board, painters, info) {
+		    let id = me[0], meX = me[1], meY = me[2], size = board.length, round = info[0], end = info[1], i;
+
+		    let getDistance = function (x1, y1, x2, y2) {
+		        return (Math.abs(x1 - x2) + Math.abs(y1 - y2)) + 1;
+		    };
+
+		    let getColorValue = function (color) {
+		        if (color === 0) return 2;
+		        if (color === id) return 0;
+		        return 2 - (Math.abs(id - color) % 3);
+		    };
+
+		    let getScore = function (x, y) {
+		        let score = 0, paintersLength = painters.length;
+
+		        for (let bX = 0; bX < size; bX++) {
+		            for (let bY = 0; bY < size; bY++) {
+		                let distance = getDistance(x, y, bX, bY);
+		                let colorValue = getColorValue(board[bX][bY]);
+		                score += (colorValue / (distance / 4)) * (distance === 1 ? 3 : 1);
+		            }
+		        }
+
+		        for (let i = 0; i < paintersLength; i++) {
+		            let pId = painters[i][0], pX = painters[i][1], pY = painters[i][2];
+		            if (pId === id) continue;
+		            let pDistance = getDistance(x, y, pX, pY);
+		            let pIdValue = getColorValue(pId);
+		            score -= (pIdValue / (pDistance / 2)) / 4;
+		        }
+
+		        return score;
+		    };
+
+		    let possibleMoves = [{x: 0, y: 0, c: 'wait'}];
+		    if (meX > 0) possibleMoves.push({x: -1, y: 0, c: 'left'});
+		    if (meY > 0) possibleMoves.push({x: -0, y: -1, c: 'up'});
+		    if (meX < size - 1) possibleMoves.push({x: 1, y: 0, c: 'right'});
+		    if (meY < size - 1) possibleMoves.push({x: 0, y: 1, c: 'down'});
+
+		    let topCommand, topScore = null;
+		    for (i = 0; i < possibleMoves.length; i++) {
+		        let score = getScore(meX + possibleMoves[i].x, meY + possibleMoves[i].y);
+		        if (topScore === null || score > topScore) {
+		            topScore = score;
+		            topCommand = possibleMoves[i].c;
+		        }
+		    }
+
+		    return topCommand;
+		}
 	}
 ]
