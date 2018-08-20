@@ -125,6 +125,7 @@ botData = [
 		    }
 		    
 		  }
+		  to(random(['right','left','up','down']));
 		}
 	}, {
 		name: "Borderline",
@@ -246,17 +247,24 @@ botData = [
 		    };
 
 		    let getScore = function (x, y) {
-		        let score = 0, paintersLength = painters.length;
+		        let score = 0, paintersLength = painters.length, i;
 
 		        for (let bX = 0; bX < size; bX++) {
 		            for (let bY = 0; bY < size; bY++) {
 		                let distance = getDistance(x, y, bX, bY);
 		                let colorValue = getColorValue(board[bX][bY]);
-		                score += (colorValue / (distance / 4)) * (distance === 1 ? 3 : 1);
+		                let factor = 1;
+
+		                if (distance === 1) {
+		                    for (i = 0; i < paintersLength; i++) if (painters[i][1] === bX && painters[i][2] === bY) factor = 0;
+		                    if (factor > 0) factor = 3;
+		                }
+
+		                score += (colorValue / (distance / 4)) * factor;
 		            }
 		        }
 
-		        for (let i = 0; i < paintersLength; i++) {
+		        for (i = 0; i < paintersLength; i++) {
 		            let pId = painters[i][0], pX = painters[i][1], pY = painters[i][2];
 		            if (pId === id) continue;
 		            let pDistance = getDistance(x, y, pX, pY);
@@ -264,7 +272,7 @@ botData = [
 		            score -= (pIdValue / (pDistance / 2)) / 4;
 		        }
 
-		        return score;
+		        return score + Math.random();
 		    };
 
 		    let possibleMoves = [{x: 0, y: 0, c: 'wait'}];
@@ -283,6 +291,6 @@ botData = [
 		    }
 
 		    return topCommand;
-		}
+		}	
 	}
 ]
