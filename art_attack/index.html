@@ -59,7 +59,14 @@
 		#playerTable {
 			border-collapse: collapse;
 		}
+
+		a {
+			font-size: 110%;
+			text-decoration: none;
+			color: blue;
+		}
 		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="botData.js"></script>
 		<script src="controller.js"></script>
 	</head>
@@ -74,6 +81,7 @@
 								<tr><td>Player Name</td><td>Score</td><td>Eliminated</td></tr>
 							</table>
 							<br/><strong>Asterisk denotes the player(s) in the lead</strong>
+							<br/><br/><strong><a href="javascript:updateBotData()">Update Bots from PPCG</a></strong>
 						</td>
 				</tr>
 		</table>
