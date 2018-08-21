@@ -22,7 +22,9 @@ function runBots() {
 	var bots_array = [];
 
 	for (var j = 0; j < botData.length; j++) {
-		bots_array.push([botData[j].uid, botData[j].x, botData[j].y]);
+		if (!botData[j].eliminated) {
+			bots_array.push([botData[j].uid, botData[j].x, botData[j].y]);
+		}
 	}
 
 	for (var i = 0; i < botData.length; i++) {
@@ -279,7 +281,7 @@ function initialise() {
 	localStorage.clear();
 
 	document.getElementById("roundNum").innerHTML = "0";
-	turnNumber = 1;
+	turnNumber = 0;
 	
 	arenaSize = botData.length * 3;
 	grid = [];
