@@ -51,6 +51,7 @@ function updateBotData() {
 					function(e){
 						try {
 							var answerBody = e.body;
+							answerBody = answerBody.replace(/<[\/]*a[^>]*>/g,"");
 							var regexp = /(?:<h\d>)([^<]+)(?=<\/h\d>)/g;
 							var name = regexp.exec(answerBody)[1];
 					
