@@ -1,5 +1,5 @@
 var grid = [];
-var CSS_COLOR_NAMES = ["Aqua","Bisque","Blue","BlueViolet","Brown","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"];
+var CSS_COLOR_NAMES = ["Aqua","Bisque","Blue","BlueViolet","Brown","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","DarkCyan","DarkGoldenRod","DarkGray","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"];
 var arenaSize = botData.length * 3;
 var maxRounds = 200;
 var turnNumber = 1;
@@ -38,6 +38,23 @@ function decodeHTMLEntities(text) {
     return text;
 }
 
+
+var stringify = function(obj, prop) {
+  var placeholder = '____PLACEHOLDER____';
+  var fns = [];
+  var json = JSON.stringify(obj, function(key, value) {
+    if (typeof value === 'function') {
+      fns.push(value);
+      return placeholder;
+    }
+    return value;
+  }, 2);
+  json = json.replace(new RegExp('"' + placeholder + '"', 'g'), function(_) {
+    return fns.shift();
+  });
+  return 'this["' + prop + '"] = ' + json + ';';
+};
+
 function updateBotData() {
 	botData = [];
 	$.ajax(
@@ -70,9 +87,10 @@ function updateBotData() {
 						}
 					}
 				)
+				console.log(stringify(botData, "botData"));
 
 				initialise();
-				console.log(botData);
+				
 			}
 		}
 	);
@@ -274,6 +292,11 @@ function findWinner() {
 	document.getElementById("roundNum").innerHTML += " - "+message;
 }
 
+function removeBot(id) {
+	botData.splice(id-1, 1);
+	initialise();
+}
+
 function updateBoard() {
 	document.getElementById("playerTable").innerHTML = "<tr><td style=\"font-size: 1.5em;font-weight: bold\">Player Name</td><td style=\"font-size: 1.5em;font-weight: bold\">Score</td><td style=\"font-size: 1.5em;font-weight: bold\">Eliminated?</td></tr>";
 
@@ -295,7 +318,7 @@ function updateBoard() {
 	}
 
 	for (var k = 0; k < botData.length; k++) {
-		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + (winners.indexOf(botData[k].name)>=0?"*":"") + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + (botData[k].eliminated?0:scores[k]) + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td></tr>";
+		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + (winners.indexOf(botData[k].name)>=0?"*":"") + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + (botData[k].eliminated?0:scores[k]) + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td><td><button onclick=\"javascript:removeBot("+botData[k].uid+")\">Remove Bot</button></td></tr>";
 	}
 }
 

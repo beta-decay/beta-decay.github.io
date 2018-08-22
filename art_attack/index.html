@@ -75,7 +75,9 @@
 		<h3>Round <span id="roundNum">0</span></h3>
 		<table>
 				<tr>
-						<td><canvas id="playWindow" width=10000 height=10000></canvas></td>
+						<td><canvas id="playWindow" width=10000 height=10000></canvas><br/><br/>
+		<button onclick="javascript:runGame()">Run Game</button>&nbsp;&nbsp;<button onclick="javascript:stopGame()">Pause Game</button>&nbsp;&nbsp;<button onclick="javascript:initialise()">Reset Game</button>&nbsp;&nbsp;<button onclick="javascript:doStuff()">Step a Single Round</button>
+		</td>
 						<td style="padding:50px">
 							<table id="playerTable">
 								<tr><td>Player Name</td><td>Score</td><td>Eliminated</td></tr>
@@ -85,8 +87,6 @@
 						</td>
 				</tr>
 		</table>
-		<br/><br/>
-		<button onclick="javascript:runGame()">Run Game</button>&nbsp;&nbsp;<button onclick="javascript:stopGame()">Pause Game</button>&nbsp;&nbsp;<button onclick="javascript:initialise()">Reset Game</button>&nbsp;&nbsp;<button onclick="javascript:doStuff()">Step a Single Round</button>
 		<br/><br/>
 		<table>
 			<tr>
