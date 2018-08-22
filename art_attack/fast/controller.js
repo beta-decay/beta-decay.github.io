@@ -247,7 +247,13 @@ function removeBot(id) {
 }
 
 function updateBoard() {
-	document.getElementById("playerTable").innerHTML = "<tr><td style=\"font-size: 1.5em;font-weight: bold\">Player Name</td><td style=\"font-size: 1.5em;font-weight: bold\">No. Wins</td><td style=\"font-size: 1.5em;font-weight: bold\">No. Eliminated</td></tr>";
+	document.getElementById("playerTable").innerHTML = "<tr><td style=\"font-size: 1.5em;font-weight: bold;background-color:#9e9e9e;color:black\">Player Name</td><td style=\"font-size: 1.5em;font-weight: bold;background-color:#9e9e9e;color:black\">No. Wins</td><td style=\"font-size: 1.5em;font-weight: bold;background-color:#9e9e9e;color:black\">No. Eliminated</td></tr>";
+
+	var botData_copy = JSON.parse(JSON.stringify(botData));
+
+	botData_copy.sort(function(a,b) {
+		return b.noWins - a.noWins;
+	});
 
 	var scores = findArea();
 
@@ -266,8 +272,8 @@ function updateBoard() {
 		}
 	}
 
-	for (var k = 0; k < botData.length; k++) {
-		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;\">"+ botData[k].name + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;\">" + botData[k].noWins + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;\">"+botData[k].noEliminated+"</span></td><td><button onclick=\"javascript:removeBot("+botData[k].uid+")\">Remove Bot</button></td></tr>";
+	for (var k = 0; k < botData_copy.length; k++) {
+		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;\">"+ botData_copy[k].name + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;\">" + botData_copy[k].noWins + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;\">"+botData_copy[k].noEliminated+"</span></td><td><button onclick=\"javascript:removeBot("+botData_copy[k].uid+")\">Remove Bot</button></td></tr>";
 	}
 }
 
@@ -289,52 +295,68 @@ function runGame() {
 }
 
 function runTournament() {
-	maxGames = document.getElementById("tournamentInput").value;
+	if (!running) {
+		running = true;
+		maxGames = document.getElementById("tournamentInput").value;
+		gameNumber = 0;
+		interval = setInterval(function() { 
+			gameNumber++;
 
-	for (gameNumber = 1; gameNumber <= maxGames; gameNumber++) {
-		localStorage.clear();
-		document.getElementById("gameNumber").innerHTML = gameNumber;
-
-
-		botData = botData.shuffle();
-
-		grid = [];
-
-		for (var i = 0; i < arenaSize; i++) {
-			grid.push([]);
-
-			for (var j = 0; j < arenaSize; j++) {
-				grid[i].push(0);
+			if (gameNumber == maxGames) {
+				running = false;
+				clearInterval(interval);
 			}
-		}
 
-		var previous_x = [];
-		var previous_y = [];
+			localStorage.clear();
+			document.getElementById("gameNumber").innerHTML = gameNumber;
 
-		for (var k = 0; k < botData.length; k++) {
-			do {
-				botData[k].x = Math.floor(Math.random()*arenaSize);
-				botData[k].y = Math.floor(Math.random()*arenaSize);
+
+			botData = botData.shuffle();
+
+			grid = [];
+
+			for (var i = 0; i < arenaSize; i++) {
+				grid.push([]);
+
+				for (var j = 0; j < arenaSize; j++) {
+					grid[i].push(0);
+				}
 			}
-			while (previous_x.indexOf(botData[k].x) >= 0 || previous_y.indexOf(botData[k].y) >= 0)
 
-			previous_x.push(botData[k].x);
-			previous_y.push(botData[k].y);
+			var previous_x = [];
+			var previous_y = [];
 
-			botData[k].uid = k+1;
-			botData[k].eliminated = false;
+			for (var k = 0; k < botData.length; k++) {
+				do {
+					botData[k].x = Math.floor(Math.random()*arenaSize);
+					botData[k].y = Math.floor(Math.random()*arenaSize);
+				}
+				while (previous_x.indexOf(botData[k].x) >= 0 || previous_y.indexOf(botData[k].y) >= 0)
 
-			grid[botData[k].x][botData[k].y] = botData[k].uid;
-		}
+				previous_x.push(botData[k].x);
+				previous_y.push(botData[k].y);
 
-		runGame();
+				botData[k].uid = k+1;
+				botData[k].eliminated = false;
 
-		updateBoard();
+				grid[botData[k].x][botData[k].y] = botData[k].uid;
+			}
+
+			runGame();
+
+			updateBoard();
+
+			if(gameNumber == maxGames) {
+				findTournamentWinner();
+			}
+		}, 0);
 	}
-
-	findTournamentWinner();
 }
 
+function stopTournament() {
+	running = false;
+	clearInterval(interval);
+}
 
 function initialise() {
 	localStorage.clear();
