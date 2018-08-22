@@ -295,6 +295,9 @@ function runTournament() {
 		localStorage.clear();
 		document.getElementById("gameNumber").innerHTML = gameNumber;
 
+
+		botData = botData.shuffle();
+
 		grid = [];
 
 		for (var i = 0; i < arenaSize; i++) {

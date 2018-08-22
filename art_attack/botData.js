@@ -1,5 +1,30 @@
 botData = [
   {
+    "name": "FarSightedGreed",
+    "func": function([id, x, y], grid, bots, gameInfo) {
+    let value = n => n ? n == id ? 0 : 2 - Math.abs(id - n) % 3 : 2;
+    let directions = [
+        {name: "wait", x: 0, y: 0},
+        {name: "left", x: -1, y: 0},
+        {name: "up", x: 0, y: -1},
+        {name: "right", x: 1, y: 0},
+        {name: "down", x: 0, y: 1},
+    ];
+    for (let d of directions) {
+        d.score = 0;
+        for (let i = 1; ; i++) {
+            let px = x + i * d.x;
+            let py = y + i * d.y;
+            if (px < 0 || py < 0 || px == grid.length || py == grid.length) break;
+            if (bots.some(([, x, y]) => x == px && y == py)) break;
+            d.score += value(grid[px][py]) / i;
+        }
+    }
+    let best = Math.max(...directions.map(({score}) => score));
+    return directions.find(({score}) => score == best).name;
+}
+  },
+  {
     "name": "Jack",
     "func": function (myself, grid, bots, gameInfo) {
     var col = myself[0];
@@ -77,9 +102,10 @@ botData = [
         nextMove(notPreferred[0], "notPreferred");
         return notPreferred[0];
     }
-    var r = ["up","down","left","right"][Math.random() *4|0];
-    nextMove(r, "random");
-    return r;
+
+    var random = randomMove();
+    nextMove(random, "random");
+    return random;
 
     function checkMove(move, currentColor) {
         var go = false;
@@ -91,11 +117,24 @@ botData = [
         }
 
         if(go) {
-            if(localStorage.nextMoveShouldNotBe && localStorage.nextMoveShouldNotBe == move) {
+            if(localStorage.jacksNextMoveShouldNotBe && localStorage.jacksNextMoveShouldNotBe == move) {
                 return false;
             }
         }
         return go;
+    }
+
+    function randomMove() {
+        if(localStorage.jacksPreviousMoveWasRandom) {
+            var repeatMove = localStorage.jacksPreviousMoveWasRandom;
+            if(repeatMove == "left" && myX > 0 || repeatMove == "right" && myX < grid.length-1 || repeatMove == "up" && myY > 0 || repeatMove == "down" && myY < grid.length-1){
+                return repeatMove;
+            }
+        }
+
+        var random = ["up","down","left","right"][Math.random() *4|0];
+        localStorage.jacksPreviousMoveWasRandom = random;
+        return random;
     }
 
     function nextMove(move, message) {
@@ -109,7 +148,10 @@ botData = [
         } else if(move == "down") {
             oppositeMove = "up";
         }
-        localStorage.nextMoveShouldNotBe = oppositeMove;
+        localStorage.jacksNextMoveShouldNotBe = oppositeMove;
+        if(message != "random") {
+            localStorage.jacksPreviousMoveWasRandom = "";
+        }
     }
 }
   },
@@ -446,202 +488,6 @@ botData = [
     }
   },
   {
-    "name": "Bob",
-    "func": function(myself, grid, bots, gameInfo) {
-  var [mc, mx, my] = myself;
-  var output;
-  var allowRetracing = false;
-
-  var size = 3;
-  var scoreboard = grid.map(column=>column.map(c=>c==mc? 0 : overMap(c, 2, 1, 0)));
-  for (let [bc, bx, by] of bots) if (bc != mc) {log([bc,bx,by],[mc,mx,my]);
-    scoreboard[bx][by] = -100;
-    if (inbounds([bx-2, by])) scoreboard[bx-2][by] = -50;
-    if (inbounds([bx+2, by])) scoreboard[bx+2][by] = -50;
-    if (inbounds([bx, by-2])) scoreboard[bx][by-2] = -50;
-    if (inbounds([bx, by+2])) scoreboard[bx][by+2] = -50;
-  }
-
-  function scoreOf (x, y) {
-    let score = 0;
-    for (let dx = -size; dx <= size; dx++) {
-      let cx = dx + x;
-      if (cx < 1 || cx >= grid.length-1) continue;
-      for (let dy = -size; dy <= size; dy++) {
-        let cy = dy + y;
-        if (cy < 1 || cy >= grid.length-1) continue;
-        score+= scoreboard[cx][cy];
-      }
-    }
-    return score;
-  }
-  var storage = this;
-  if (gameInfo[0] < 10) this.timer = 10000;
-  function rescore() {
-    storage.bestScore = -Infinity;
-    var blur = scoreboard.map((column, x)=>column.map((c, y) => {
-      let score = scoreOf(x, y);
-      if (score > storage.bestScore) {
-        storage.bestScore = score;
-        storage.bestX = x;
-        storage.bestY = y;
-      }
-      return score;
-    }));
-    storage.atBest = false;
-    storage.timer = 0;
-    log(blur);
-  }
-  if (this.timer > 200) rescore();
-
-  if (grid[mx][my] == 0 && !bots.some(([col, bx, by])=> col != mc && bx==mx && by==my)) return "wait";
-
-
-  // annoying localStorage
-  if (!localStorage.dzaima_pastMoves) {
-    pastMoves = ["-1;0"];
-    nowMoves = new Array(30).fill("-1;0");
-  } else {
-    pastMoves = JSON.parse(localStorage.dzaima_pastMoves);
-    nowMoves = JSON.parse(localStorage.dzaima_pastMoves);
-  }
-  nowMoves.push(mx+";"+my);
-  nowMoves.shift();
-  localStorage.dzaima_pastMoves = JSON.stringify(nowMoves);
-
-
-
-  function log(...args) {
-    // console.log(...args);
-  }
-  function over(col) { // 1 if overrides happen, -1 if overrides don't happen, 0 if override = 0
-    let res = Math.abs(mc-col) % 3;
-    return res==1? 0 : res==0? 1 : -1;
-  }
-  function overMap(col, best, good, bad, mine = good) { // 1 if overrides happen, -1 if overrides don't happen, 0 if override = 0
-    let res = Math.abs(mc-col) % 3;
-    return col == mc? mine : res==1? good : res==0? best : bad;
-  }
-  var iwin = col=>over(col) == 1;
-  var zeroes = col=>over(col) == 0;
-  function to([x, y]) {
-    //debugger
-    var LR = x > mx? [mx+1, my] : x < mx? [mx-1, my] : null;
-    var UD = y > my? [mx, my+1] : y < my? [mx, my-1] : null;
-    if (LR && UD) {
-      var LRScore = overMap(LR, 2, 1, 0, 0);
-      var UDScore = overMap(UD, 2, 1, 0, 0);
-      if (LRScore == UDScore) return toPos([LR, UD][Math.random()>.5? 1 : 0])
-      else if (LRScore > UDScore) return toPos(LR);
-      else return toPos(UD);
-    } else return toPos(LR || UD || [x, y]);
-  }
-  function toPos([x,y]) {
-      if (x > mx) return "right";
-      if (x < mx) return "left";
-      if (y < my) return "up";
-      if (y > my) return "down";
-      return 'wait';
-  }
-  function inbounds([x, y]) {
-    // if (x<grid.length && y<grid.length && x>=0 && y>=0) return true;
-    if (x<grid.length-1 && y<grid.length-1 && x>=1 && y>=1) return true;
-    return false;
-  }
-  function get([x,y]) {
-    if (inbounds([x, y])) return grid[x][y];
-    return 0;
-  }
-  function bestOf (arr) {
-    if (arr.length == 0) return false;
-    var bestScore = -Infinity;
-    var bestPos;
-    for (var [x, y] of arr) {
-      let score = 0;
-      for (var [bcol, bx, by] of bots) {
-        let dist = Math.sqrt((x-bx)**2 + (y-by)**2);
-        let res = over(bcol);
-        let power = res==0? 1 : res==1? 0.4 : 1.4;
-        score+= power * dist;
-      }
-
-      if (pastMoves.includes(x+";"+y)) score-= 1000000;
-
-      if (score > bestScore) {
-        bestScore = score;
-        bestPos = [x,y];
-      }
-    }
-    if (bestScore < -500000) {
-      if (allowRetracing) log("RETRACING");
-      else return false;
-    }
-    output = to(bestPos);
-    return true;
-  }
-
-
-  // log(x,this.bestX, y,this.bestY);
-  var distToBest = Math.abs(this.bestX-mx) + Math.abs(this.bestY-my);
-  if (this.atBest || distToBest < 10) {
-    log("at best; collecting");
-    this.atBest = true;
-    var orth = [[-1,0],[0,-1],[1,0],[0,1]];
-    var neighbors = orth
-      .map(([x,y])=>[x+mx, y+my])
-      .filter(c=>inbounds(c))
-      .filter(([x,y])=>!bots.some(([bid, bx, by]) => bx==x && by==y))
-      .map(c=>[c,get(c)]);
-
-    var best = neighbors.filter(([_, col]) => col != mc && col != 0 && over(col) == 1);
-    if (bestOf(best.map(([pos, col]) => pos))) {
-      log("best");
-      return output;
-    }
-
-    var good = neighbors.filter(([_, col]) => col == 0);
-    if (bestOf(good.map(([pos, col]) => pos))) {
-      log("good");
-      return output;
-    }
-
-    var okay = neighbors.filter(([_, col]) => over(col) == 0);
-    if (bestOf(okay.map(([pos, col]) => pos))) {
-      log("okay");
-      return output;
-    }
-
-
-    for (let i = 2; i < grid.length; i++) {
-      if (i > 6) allowRetracing = true;
-      neighbors = orth
-        .map(([x, y]) => [x*i + mx, y*i + my])
-        .filter(c=>inbounds(c))
-        .map(c=>[c,get(c)]);
-
-
-      best = neighbors.filter(([_, col]) => col == 0 || (col != mc && over(col) == 1));
-      if (bestOf(best.map(([pos, col]) => pos))) {
-        log("best dist");
-        return output;
-      }
-      okay = neighbors.filter(([_, col]) => over(col) == 0);
-      if (bestOf(okay.map(([pos, col]) => pos))) {
-        log("okay dist");
-        return output;
-      }
-
-    }
-
-
-    return ['right','left','up','down'][Math.floor(Math.random()*4)];
-  } else log("going to best");
-  if (scoreOf(this.bestX, this.bestY) < this.bestScore/2 || distToBest > 20) rescore();
-
-  return to([this.bestX, this.bestY]);
-}
-  },
-  {
     "name": "AnnoyingLittleBrother",
     "func": function(myself, grid, bots, gameInfo) {          
 
@@ -870,11 +716,20 @@ botData = [
 }
   },
   {
-    "name": "NotSoDumbBot",
+    "name": "The Bot Formerly Known As Numerologist",
     "func": function(myself, grid, bots, gameInfo) {
   let myCol = myself[0];
   let myX = myself[1];
   let myY = myself[2];
+
+  let evasionStartDistance = 3;
+  let evasionDuration = 10;
+  let evasionCooldown = Math.max(20, bots.length);
+  let trollDetectionMinTurn = Math.max(40, bots.length * 2);
+  let trollDetectionWindow = Math.max(20, bots.length);
+  let trollDetectionError = 3;
+  let safeDistance = 15;
+  let minScorePotential = 10;
 
   function getScore(x) {
     let score = 0;
@@ -897,78 +752,135 @@ botData = [
   localStorage.samYonnouMyScoreHistory = JSON.stringify(myScoreHistory);
 
   function isProbalyTrolled() {
-    if (gameInfo[0] < bots.length * 2) {
+    if (gameInfo[0] < trollDetectionMinTurn) {
       return false; // too early to tell
     }
-    if (localStorage.samYonnouEvasiveActionsStarted && gameInfo[0] - parseInt(localStorage.samYonnouEvasiveActionsStarted, 10) > 8) {
-      if (gameInfo[0] - parseInt(localStorage.samYonnouEvasiveActionsStarted, 10) > 13) {
-        localStorage.samYonnouEvasiveActionsStarted = null;
+    if (localStorage.samYonnouEvasiveActionsStarted) {
+      let evasionStarted = parseInt(localStorage.samYonnouEvasiveActionsStarted, 10);
+      if (gameInfo[0] - evasionStarted > evasionDuration) {
+        if (gameInfo[0] - evasionStarted > evasionDuration + evasionCooldown) {
+          localStorage.samYonnouEvasiveActionsStarted = null;
+        }
+        return false; // we need to test if our evasive actions worked
       }
-      return false; // we need to test if our evasive actions worked
+      return true;
     }
-    for (let i = bots.length; i > 0; i--) {
+    let increaseCount = 0;
+    for (let i = trollDetectionWindow; i > 0; i--) {
       if (myScoreHistory[gameInfo[0] - i] < myScoreHistory[gameInfo[0] - i + 1]) {
-        return false;
+        increaseCount++;
       }
     }
-    return true;
+    return increaseCount <= trollDetectionError;
   }
 
   function isTimeForAggression() {
     return myScore > bots.length * 8;
   }
 
-  function isInferiorExplorer(x, y) {
-    return grid[x][y] != myCol && Math.abs(grid[x][y] - myCol) % 3 == 0;
+  function isInferiorExplorer(c) {
+    return c != 0 && c != myCol && Math.abs(c - myCol) % 3 == 0;
+  }
+
+  function isEqualExplorer(c) {
+    return c != 0 && Math.abs(c - myCol) % 3 == 1
   }
 
   function isEnemyTerritory(x, y) {
     let enemyScore = getScore(x, y);
-    return isTimeForAggression() && Math.abs(grid[x][y] - myCol) % 3 == 1 && enemyScore / myScore > 2;
+    return isTimeForAggression() && isEqualExplorer(grid[x][y]) && enemyScore > myScore * 3;
   }
 
   function isRipeForExploration(x, y) {
-    return (grid[x][y] == 0 || isInferiorExplorer(x, y));
+    return grid[x][y] == 0 || isInferiorExplorer(grid[x][y]);
+  }
+
+  function isValidPos(x, y) {
+    return x >= 0 && y >= 0 && x < grid.length && y < grid.length;
+  }
+
+  let scorePotentialCache = {};
+
+  function getScorePotential(x, y) {
+    if (scorePotentialCache[x]) {
+      if (scorePotentialCache[x][y]) {
+        return Math.max(0, scorePotentialCache[x][y][0]);
+      }
+    }   
+
+    let potential = [1 - (Math.abs(x - myX) + Math.abs(y - myY))];
+    let bfs = [[x, y]];
+    let alreadySeen = {};
+
+    while (bfs.length > 0) {
+      let pos = bfs.shift();
+
+      if (!isValidPos(pos[0], pos[1]) || !isRipeForExploration(pos[0], pos[1])) {
+        continue;
+      }
+
+      if (!!alreadySeen[pos[0]] && !!alreadySeen[pos[0]][pos[1]]) {
+        continue;
+      }
+
+      if (!alreadySeen[pos[0]]) {
+        alreadySeen[pos[0]] = {};
+      }
+      alreadySeen[pos[0]][pos[1]] = true;
+      potential[0]++;
+      if (!scorePotentialCache[pos[0]]) {
+        scorePotentialCache[pos[0]] = {};
+      }
+      scorePotentialCache[pos[0]][pos[1]] = potential;
+
+      bfs.push([pos[0] - 1, pos[1]]);
+      bfs.push([pos[0] + 1, pos[1]]);
+      bfs.push([pos[0], pos[1] - 1]);
+      bfs.push([pos[0], pos[1] + 1]);
+    }
+
+    return Math.max(0, potential[0]);
   }
 
   function getExplorationPriority(x, y) {
-    if (isInferiorExplorer(x, y)) {
-      let inferiorExplorerScore = getScore(grid[x][y]);
-      if (isTimeForAggression() && inferiorExplorerScore > myScore * 1.5) {
-        // this explorer is a danger and needs to be knocked down a peg
-        return inferiorExplorerScore;
-      }
-    }
     let closestBot = Number.MAX_SAFE_INTEGER;
     for (let i = 0; i < bots.length; i++) {
       if (bots[i][0] != myCol) {
-        let distance = Math.abs(bots[i][1] - myX) + Math.abs(bots[i][2] - myY);
+        let distance = Math.abs(bots[i][1] - x) + Math.abs(bots[i][2] - y);
         if (distance < closestBot) {
           closestBot = distance;
         }
       }
     }
-    // the farther away the closest bot is the better
-    return -((2 * grid.length) - closestBot);
+    if (closestBot < safeDistance) {
+      // the farther away the closest bot is the better
+      return closestBot;
+    }
+    // otherwise pick the spot that has the highest score potential
+    let scorePotential = getScorePotential(x, y);
+    if (scorePotential <= 0) {
+      return Number.MIN_SAFE_INTEGER;
+    }
+    return -1.0 / scorePotential;
   }
 
   function selectPath(selectionFunction, adhereToDirectionBan) {
     let possiblePaths = [];
     let possiblePathPriority = [];
 
-    if (myX > 0 && selectionFunction(myX - 1, myY)) {
+    if (isValidPos(myX - 1, myY) && selectionFunction(myX - 1, myY)) {
       possiblePaths.push("left");
       possiblePathPriority.push(getExplorationPriority(myX - 1, myY));
     }
-    if (myX < grid.length - 1 && selectionFunction(myX + 1, myY)) {
+    if (isValidPos(myX + 1, myY) && selectionFunction(myX + 1, myY)) {
       possiblePaths.push("right");
       possiblePathPriority.push(getExplorationPriority(myX + 1, myY));
     }
-    if (myY > 0 && selectionFunction(myX, myY - 1)) {
+    if (isValidPos(myX, myY - 1) && selectionFunction(myX, myY - 1)) {
       possiblePaths.push("up");
       possiblePathPriority.push(getExplorationPriority(myX, myY - 1));
     }
-    if (myY < grid[0].length - 1 && selectionFunction(myX, myY + 1)) {
+    if (isValidPos(myX, myY + 1) && selectionFunction(myX, myY + 1)) {
       possiblePaths.push("down");
       possiblePathPriority.push(getExplorationPriority(myX, myY + 1));
     }
@@ -986,7 +898,8 @@ botData = [
         }
       }
       if (adhereToDirectionBan && localStorage.samYonnouBannedDirection && selection == localStorage.samYonnouBannedDirection) {
-        possiblePaths.splice(localStorage.samYonnouBannedDirection, 1);
+        possiblePathPriority.splice(possiblePaths.indexOf(selection), 1);
+        possiblePaths.splice(possiblePaths.indexOf(selection), 1);
         tryPickPath = possiblePaths.length > 0;
       } else {
         return selection;
@@ -1002,9 +915,9 @@ botData = [
     let closestDecoy = null;
     let closestDecoyScore = 0;
     for (let i = 0; i < bots.length; i++) {
-      if (bots[i][0] != myCol && Math.abs(bots[i][0] - myCol) % 3 == 0) {
+      if (isInferiorExplorer(bots[i][0])) {
         let distance = Math.abs(bots[i][1] - myX) + Math.abs(bots[i][2] - myY);
-        if (distance > 1 && distance < closestDecoyDistance + 50) {
+        if (distance > 1 && distance <= closestDecoyDistance) {
           let decoyScore = getScore(bots[i][0]);
           if (decoyScore > closestDecoyScore) {
             closestDecoyDistance = distance;
@@ -1015,7 +928,7 @@ botData = [
       }
     }
     if (closestDecoy) {
-      if (!localStorage.samYonnouEvasiveActionsStarted && closestDecoyDistance < 3) {
+      if (!localStorage.samYonnouEvasiveActionsStarted && closestDecoyDistance <= evasionStartDistance) {
         localStorage.samYonnouEvasiveActionsStarted = JSON.stringify(gameInfo[0]);
       }
       localStorage.samYonnouBannedDirection = null;
@@ -1036,17 +949,20 @@ botData = [
 
   let selection = selectPath(isRipeForExploration, true);
   if (!selection) {
-    selection = selectPath(isEnemyTerritory, true);
+    selection = selectPath(isRipeForExploration, false);
     if (!selection) {
-      selection = selectPath(isRipeForExploration, false);
+      selection = selectPath(isEnemyTerritory, true);
       if (!selection) {
-        function findNewStart(selectionFunction) {
+        function findNewStart(selectionFunction, considerPotential) {
           let newStart = null;
           let bestDistance = Number.MAX_SAFE_INTEGER;
 
           for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {
               if (selectionFunction(i, j)) {
+                if (considerPotential && getScorePotential(i, j) < minScorePotential) {
+                  continue;
+                }
                 let distance = Math.abs(i - myX) + Math.abs(j - myY);
                 if (distance > 1 && distance < bestDistance) {
                   newStart = [i, j];
@@ -1057,11 +973,14 @@ botData = [
           }
           return newStart;
         }
-        let newStart = findNewStart(isRipeForExploration);
+        let newStart = findNewStart(isRipeForExploration, true);
         if (!newStart) {
-          newStart = findNewStart(isEnemyTerritory);
+          newStart = findNewStart(isRipeForExploration, false);
           if (!newStart) {
-            newStart = [(myX + 23) % grid.length, (myY + 23) % grid.length];
+            newStart = findNewStart(isEnemyTerritory, false);
+            if (!newStart) {
+              newStart = [(myX + 23) % grid.length, (myY + 23) % grid.length];
+            }
           }
         }
 
@@ -1805,16 +1724,22 @@ botData = [
   {
     "name": "Clever Name",
     "func": function(myself, grid, bots, gameInfo) {
+    // Do a quick dance for identification.
+    let round = gameInfo[0];
+    if (round < 5) {
+        return ["down", "right", "up", "left"][round % 4];
+    }
+
     // Parse the arguments.
-    let myId = myself[0];
-    let myX = myself[1];
-    let myY = myself[2];
+    let [myId, myX, myY] = myself;
 
     // Check each square to see if it's a good target.
     let targetX, targetY, targetDist = Infinity;
     let numAtDist;
     for (let x = 0; x < grid.length; x++) {
         for (let y = 0; y < grid.length; y++) {
+            // Whoever's fighting for this square can have it.
+            if (x === myX && y === myY) { continue; }
             // We don't care about our own squares.
             if (grid[x][y] === myId) { continue; }
 
