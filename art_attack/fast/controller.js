@@ -405,7 +405,7 @@ function addNewBot() {
 	botName = document.getElementById("newBotNameInput").value;
 	eval("botFunction = "+document.getElementById("newBotCodeInput").value);
 
-	stopGame();
+	stopTournament();
 
 	botData.push({
 		name: botName,
@@ -413,7 +413,7 @@ function addNewBot() {
 	});
 
 	initialise();
-	runGame();
+	runTournament();
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
