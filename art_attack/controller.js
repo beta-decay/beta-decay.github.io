@@ -420,7 +420,6 @@ function addNewBot() {
 	});
 
 	initialise();
-	runGame();
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
