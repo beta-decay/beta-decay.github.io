@@ -200,7 +200,11 @@ function drawBots() {
 	for (var i = 0; i < botData.length; i++) {
 		if (!botData[i].eliminated) {
 			ctx.beginPath();
-			ctx.fillStyle = "#000";
+
+			botData[i].tracked = document.getElementById("checkbox_"+botData[i].uid).checked
+			ctx.fillStyle = botData[i].tracked?"#F00":"#000";
+
+			var border_width = botData[i].tracked?4:2;
 
 			var xpos = botData[i].x*20;
 			var ypos = botData[i].y*20;
@@ -211,7 +215,7 @@ function drawBots() {
 			ctx.beginPath();
 			ctx.fillStyle = botData[i].colour;
 
-			ctx.fillRect(xpos+2, ypos+2, 16, 16);
+			ctx.fillRect(xpos + border_width, ypos + border_width, 20-border_width*2, 20-border_width*2);
 			ctx.closePath();
 		}
 	}
@@ -298,7 +302,7 @@ function removeBot(id) {
 }
 
 function updateBoard() {
-	document.getElementById("playerTable").innerHTML = "<tr><td style=\"font-size: 1.5em;font-weight: bold\">Player Name</td><td style=\"font-size: 1.5em;font-weight: bold\">Score</td><td style=\"font-size: 1.5em;font-weight: bold\">Eliminated?</td></tr>";
+	document.getElementById("playerTable").innerHTML = "<tr><td style=\"font-size: 1.5em;font-weight: bold\">Player Name</td><td style=\"font-size: 1.5em;font-weight: bold\">Score</td><td style=\"font-size: 1.5em;font-weight: bold\">Eliminated?</td><td style=\"font-size: 1.5em;font-weight: bold\">Track?</td></tr>";
 
 	var scores = findArea();
 
@@ -318,7 +322,7 @@ function updateBoard() {
 	}
 
 	for (var k = 0; k < botData.length; k++) {
-		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + (winners.indexOf(botData[k].name)>=0?"*":"") + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + (botData[k].eliminated?0:scores[k]) + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td><td><button onclick=\"javascript:removeBot("+botData[k].uid+")\">Remove Bot</button></td></tr>";
+		document.getElementById("playerTable").innerHTML += "<tr><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+botData[k].name + (winners.indexOf(botData[k].name)>=0?"*":"") + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">" + (botData[k].eliminated?0:scores[k]) + "</span></td><td><span style=\"font-size: 1.5em;font-weight: bold;color:"+botData[k].colour+"\">"+(botData[k].eliminated?"Yes":"No")+"</span></td><td><input type=\"checkbox\" id=\"checkbox_"+botData[k].uid+"\" "+(botData[k].tracked?"checked":"")+" /></td><td><button onclick=\"javascript:removeBot("+botData[k].uid+")\">Remove Bot</button></td></tr>";
 	}
 }
 
@@ -394,6 +398,7 @@ function initialise() {
 		botData[k].colour = CSS_COLOR_NAMES[k];
 		botData[k].uid = k+1;
 		botData[k].eliminated = false;
+		botData[k].tracked = false;
 
 		grid[botData[k].x][botData[k].y] = botData[k].uid;
 	}
