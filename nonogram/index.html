@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Nonogram Puzzle Generator</title>
+		<script src="./game.js"></script>
+		<style>
+			canvas {
+				border: 1px solid black;
+				background-color: #FFF;
+			}
+
+			body {
+				font-family: sans-serif;
+				padding-left: 10%;
+				padding-right: 10%;
+				background-color: #E19D9D;
+			}
+
+			ol {
+				font-family: monospace;
+				font-weight: bolder;
+				font-size: 1.2em;
+			}
+
+			li {
+				padding: 5px;
+			}
+
+			td {
+				padding-right: 50px;
+				padding-left: 50px;
+			}
+
+			button {
+				padding: 10px;
+				font-weight: bold;
+				background-color: gainsboro;
+				border-radius: 10px;
+			}
+
+
+			#aboveClues {
+				text-align: center;
+			}
+
+			#clues {
+				display: table;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div id="aboveClues">
+				<h1>Nonogram Puzzle Generator</h1>
+				<strong>Size of board: </strong><input id="boardSizeInput" value=10 />
+				<br/><br/>
+				<button onclick="javascript:generateGame()">New Game</button>&nbsp;&nbsp;<button onclick="javascript:checkGame()">Check Answer</button>&nbsp;&nbsp;<button onclick="javascript:revealAnswer()">Reveal Answer</button>&nbsp;&nbsp;<button onclick="javascript:clearGrid()">Clear Grid</button>
+				<br/><br/>
+				<canvas id="gridCanvas" width=400 height=400></canvas>
+			</div>
+			<br/><br/>
+			<div id="clues">
+				<h2>Clues:</h2>
+				<table>
+					<tr>
+						<td>
+							<h3>Horizontal:</h3>
+							<ol id="horizontalClues"></ol>
+						</td>
+						<td>
+							<h3>Vertical:</h3>
+							<ol id="verticalClues"></ol>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>
