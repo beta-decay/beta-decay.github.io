@@ -45,7 +45,7 @@ function drawGrid() {
 		ctx.closePath();
 	}
 
-	// Draw horixontal lines
+	// Draw horizontal lines
 	for (var y = 0; y < canvas.height; y+=30) {
 		ctx.beginPath();
 		ctx.strokeStyle = "#777";
@@ -155,8 +155,8 @@ function clearGrid() {
 function on_canvas_click(ev) {
 	var canvas = document.getElementById("gridCanvas");
 
-    var x = ev.clientX - canvas.offsetLeft;
-    var y = ev.clientY - canvas.offsetTop;
+    var x = ev.clientX - canvas.getBoundingClientRect().left;
+    var y = ev.clientY - canvas.getBoundingClientRect().top;
 
     // Find square
     var x_grid = Math.floor(x/30);
