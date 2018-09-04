@@ -38,7 +38,7 @@ function drawGrid() {
 	// Draw vertical lines
 	for (var x = 0; x < canvas.width; x+=30) {
 		ctx.beginPath();
-		ctx.strokeStyle = "#777";
+		ctx.strokeStyle = x%150==0&&x>0?"#00F":"#777";
 		ctx.moveTo(x, 0);
 		ctx.lineTo(x, canvas.height);
 		ctx.stroke();
@@ -48,7 +48,7 @@ function drawGrid() {
 	// Draw horizontal lines
 	for (var y = 0; y < canvas.height; y+=30) {
 		ctx.beginPath();
-		ctx.strokeStyle = "#777";
+		ctx.strokeStyle = y%150==0&&y>0?"#00F":"#777";
 		ctx.moveTo(0, y);
 		ctx.lineTo(canvas.width, y);
 		ctx.stroke();
