@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Nonogram Puzzle Generator</title>
+		<script src="./savedGrids.js"></script>
 		<script src="./game.js"></script>
 		<style>
 			canvas {
@@ -53,7 +54,11 @@
 				<h1>Nonogram Puzzle Generator</h1>
 				<strong>Size of board: </strong><input id="boardSizeInput" value=10 />
 				<br/><br/>
-				<button onclick="javascript:generateGame()">New Game</button>&nbsp;&nbsp;<button onclick="javascript:checkGame()">Check Answer</button>&nbsp;&nbsp;<button onclick="javascript:revealAnswer()">Reveal Answer</button>&nbsp;&nbsp;<button onclick="javascript:clearGrid()">Clear Grid</button>
+				<button onclick="javascript:generateGame()">New Game</button>&nbsp;&nbsp;<button onclick="javascript:checkGame()">Check Answer</button>&nbsp;&nbsp;<button onclick="javascript:revealAnswer()">Reveal Answer</button>&nbsp;&nbsp;<button onclick="javascript:clearGrid()">Clear Grid</button><br/><br/>
+				<div style="border:2px solid black;display:inline-block;padding-left: 20px;padding-right: 20px;">
+					<h3>Load a saved game</h3>
+					Size of grid: <select id="boardSizeSelect" style="width:50px;text-align: center;font-weight: bold;"><option value="5">5</option><option value="10">10</option></select><br/><br/>Grid number: <select id="gridNumberSelect" style="width:50px;text-align: center;font-weight: bold;"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select><br/><br/><button onclick="javascript:loadSavedGame()">Load Saved Game</button><br/><br/>
+				</div>
 				<br/><br/>
 				<canvas id="gridCanvas" width=400 height=400></canvas>
 			</div>

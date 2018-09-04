@@ -115,10 +115,36 @@ function generateClues() {
 	}
 }
 
+function printGrid() {
+	console.log(JSON.stringify(player_grid));
+}
+
 function generateGame() {
 	boardSize = document.getElementById("boardSizeInput").value;
 	
 	grid = [];
+	player_grid = [];
+
+	// Generate the grid
+	for (var x = 0; x < boardSize; x++) {
+		grid.push([]);
+		player_grid.push([])
+
+		for (var y = 0; y < boardSize; y++) {
+			grid[x].push(Math.round(Math.random()));
+			player_grid[x].push(0);
+		}
+	}
+
+	drawGrid();
+	generateClues();
+}
+
+function loadSavedGame() {
+	boardSize = document.getElementById("boardSizeSelect").value;
+	var gridNumber = document.getElementById("gridNumberSelect").value;
+
+	grid = savedGrids[boardSize][gridNumber-1];
 	player_grid = [];
 
 	// Generate the grid
