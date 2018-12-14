@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html>
+<head>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<title>Exported from Notepad++</title>
+<style type="text/css">
+span {
+	font-family: 'Courier New';
+	font-size: 10pt;
+	color: #F8F8F2;
+}
+body {
+	background-color: #272822;
+}
+.sc0 {
+}
+.sc2 {
+	color: #AE81FF;
+}
+.sc3 {
+	color: #E6DB74;
+}
+.sc5 {
+	color: #F92672;
+}
+.sc10 {
+	color: #F92672;
+}
+.sc11 {
+	color: #66D9EF;
+}
+</style>
+</head>
+<body>
+<div style="float: left; white-space: pre; line-height: 1; background: #272822; "><span class="sc5">from</span><span class="sc0"> </span><span class="sc11">PIL</span><span class="sc0"> </span><span class="sc5">import</span><span class="sc0"> </span><span class="sc11">Image</span><span class="sc0"> </span><span class="sc5">as</span><span class="sc0"> </span><span class="sc11">I</span><span class="sc0">
+
+</span><span class="sc11">width</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc2">10000</span><span class="sc0">
+</span><span class="sc11">height</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc2">10000</span><span class="sc0">
+
+</span><span class="sc11">im</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">I</span><span class="sc10">.</span><span class="sc11">new</span><span class="sc10">(</span><span class="sc3">"RGB"</span><span class="sc10">,[</span><span class="sc11">width</span><span class="sc10">,</span><span class="sc11">height</span><span class="sc10">],</span><span class="sc3">"white"</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc11">pix</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">im</span><span class="sc10">.</span><span class="sc11">load</span><span class="sc10">()</span><span class="sc0">
+
+</span><span class="sc11">z_0</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc2">0</span><span class="sc0">
+
+</span><span class="sc11">plot_size</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc2">3.5</span><span class="sc0">
+</span><span class="sc11">offset</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">complex</span><span class="sc10">(</span><span class="sc2">0.5</span><span class="sc10">,</span><span class="sc2">0</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc11">function</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">lambda</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">C</span><span class="sc10">:</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc10">**</span><span class="sc2">2</span><span class="sc0"> </span><span class="sc10">+</span><span class="sc0"> </span><span class="sc11">C</span><span class="sc0">
+
+</span><span class="sc5">for</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc5">in</span><span class="sc0"> </span><span class="sc11">range</span><span class="sc10">(</span><span class="sc11">width</span><span class="sc10">):</span><span class="sc0">
+
+    </span><span class="sc5">for</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc0"> </span><span class="sc5">in</span><span class="sc0"> </span><span class="sc11">range</span><span class="sc10">(</span><span class="sc11">height</span><span class="sc10">):</span><span class="sc0">
+        </span><span class="sc11">z_n</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">z_0</span><span class="sc0">
+        
+        </span><span class="sc11">a</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc10">/</span><span class="sc11">height</span><span class="sc0"> </span><span class="sc10">*</span><span class="sc0"> </span><span class="sc11">plot_size</span><span class="sc0"> </span><span class="sc10">-</span><span class="sc0"> </span><span class="sc11">plot_size</span><span class="sc10">/</span><span class="sc2">2</span><span class="sc0">
+        </span><span class="sc11">b</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">/</span><span class="sc11">width</span><span class="sc0"> </span><span class="sc10">*</span><span class="sc0"> </span><span class="sc11">plot_size</span><span class="sc0"> </span><span class="sc10">-</span><span class="sc0"> </span><span class="sc11">plot_size</span><span class="sc10">/</span><span class="sc2">2</span><span class="sc0">
+
+        </span><span class="sc11">C</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">complex</span><span class="sc10">(</span><span class="sc11">a</span><span class="sc10">,</span><span class="sc11">b</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">-</span><span class="sc0"> </span><span class="sc11">offset</span><span class="sc0">
+
+        </span><span class="sc11">colour</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">(</span><span class="sc2">0</span><span class="sc10">,</span><span class="sc2">0</span><span class="sc10">,</span><span class="sc2">0</span><span class="sc10">)</span><span class="sc0">
+        
+        </span><span class="sc5">for</span><span class="sc0"> </span><span class="sc11">i</span><span class="sc0"> </span><span class="sc5">in</span><span class="sc0"> </span><span class="sc11">range</span><span class="sc10">(</span><span class="sc2">100</span><span class="sc10">):</span><span class="sc0">
+            </span><span class="sc11">z_n</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">function</span><span class="sc10">(</span><span class="sc11">z_n</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">C</span><span class="sc10">)</span><span class="sc0">
+
+            </span><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">abs</span><span class="sc10">(</span><span class="sc11">z_n</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">&gt;</span><span class="sc0"> </span><span class="sc2">2</span><span class="sc10">:</span><span class="sc0">
+                </span><span class="sc11">rgb_val</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc2">255</span><span class="sc10">-</span><span class="sc11">int</span><span class="sc10">(</span><span class="sc2">255</span><span class="sc10">/(</span><span class="sc11">i</span><span class="sc10">+</span><span class="sc2">1</span><span class="sc10">))</span><span class="sc0">
+                </span><span class="sc11">colour</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">(</span><span class="sc2">255</span><span class="sc10">,</span><span class="sc11">rgb_val</span><span class="sc10">,</span><span class="sc11">rgb_val</span><span class="sc10">)</span><span class="sc0">
+                </span><span class="sc5">break</span><span class="sc0">
+
+        </span><span class="sc11">pix</span><span class="sc10">[</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">]</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">colour</span><span class="sc0">
+
+</span><span class="sc11">im</span><span class="sc10">.</span><span class="sc11">save</span><span class="sc10">(</span><span class="sc3">"multibrot_output4.png"</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc11">im</span><span class="sc10">.</span><span class="sc11">show</span><span class="sc10">()</span><span class="sc0">
+
+</span><span class="sc11">input</span><span class="sc10">(</span><span class="sc3">"\n\nPress ENTER to continue"</span><span class="sc10">)</span><span class="sc0">
+</span></div></body>
+</html>
