@@ -55,8 +55,8 @@ mean,=ax.plot([],[],'bo',ms=12)
 diff,=ax.plot([],[],'ro',ms=12)
 
 def animate(i):
-    thisx=[x1[i],x_pivot1[i],x_pivot2[i],x2[i]]
-    thisy=[y1[i],y_pivot1[i],y_pivot2[i],y2[i]]
+    thisx=[x1[i],x_pivot1[i],x_pivot2[i],x2[i],0.5*(x_pivot2[i]+x2[i]),0.5*(x_pivot1[i]+x1[i])]
+    thisy=[y1[i],y_pivot1[i],y_pivot2[i],y2[i],0.5*(y_pivot2[i]+y2[i]),0.5*(y_pivot1[i]+y1[i])]
     line.set_data(thisx, thisy)
     bobsx=[x1[i],x2[i]]
     bobsy=[y1[i],y2[i]]

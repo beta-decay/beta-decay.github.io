@@ -18,7 +18,7 @@ def canvas(nx,ny,sizex,sizey):
     ax3=plt.subplot(gs[2,0])
     return fig,ax1,ax2,ax3
 
-omega0=3.2 # angular frequency of driving force
+omega0=1. # angular frequency of driving force
 f0=1.     # amplitude of driving sinusoidal force
 Q=20      # quality of oscillator
 k=4.      # spring constant
@@ -44,7 +44,7 @@ sinbit=((omega0+omegap)/sumd-(omega0-omegap)/diffd)*np.sin(omega0*t)
 xs=prefactor*(cosbit+sinbit)
 cosbit=(omegat/sumd-omegat/diffd)*np.cos(omegap*t)
 sinbit=((omega0+omegap)/sumd+(omega0-omegap)/diffd)*np.sin(omegap*t)
-xt=prefactor*(cosbit+sinbit)*np.exp(-omegat*t)
+xt=prefactor*(sinbit-cosbit)*np.exp(-omegat*t)
 
 # determine the displacement as a function of time by
 # summing up the weighted G(t-t_imp) contributions.
