@@ -4,7 +4,7 @@
  <description>This is an RSS feed to test</description>
  <link>http://beta-decay.github.io</link>
  
- <item><title>Python Test</title><description>This is a test using Python</description><guid>2020-04-25T11:52:27.415550</guid><pubDate>Sat, 25 Apr, 2020 11:52:27 GMT</pubDate></item><item>
+ <item><title>11:58:07</title><description>The time is 11:58:07</description><guid>2020-04-25T11:58:07.970691</guid><pubDate>Sat, 25 Apr, 2020 11:58:07 GMT</pubDate></item><item>
   <title>First entry</title>
   <description>Here is some text containing an interesting description.</description>
   <guid>20200425T221200</guid>
