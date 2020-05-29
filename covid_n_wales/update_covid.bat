@@ -1,0 +1,2 @@
+python covid_n_wales.py
+python covid_n_wales_separated.py

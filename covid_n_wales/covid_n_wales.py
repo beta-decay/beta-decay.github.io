@@ -6,16 +6,16 @@ import matplotlib.cm
 import matplotlib.dates as mdates
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter,
                                AutoMinorLocator)
-import urllib.request
+from matplotlib.figure import figaspect
+import requests
 import re
 
 # Download Excel file
-with urllib.request.urlopen('http://www2.nphs.wales.nhs.uk:8080/CommunitySurveillanceDocs.nsf/3dc04669c9e1eaa880257062003b246b/77fdb9a33544aee88025855100300cab/$FILE/Rapid%20COVID-19%20surveillance%20data.xlsx') as response:
-    filedata = response.read()
+filedata = requests.get('http://www2.nphs.wales.nhs.uk:8080/CommunitySurveillanceDocs.nsf/3dc04669c9e1eaa880257062003b246b/77fdb9a33544aee88025855100300cab/$FILE/Rapid%20COVID-19%20surveillance%20data.xlsx')
 
 # Write to Excel file
 with open('Rapid COVID-19 surveillance data.xlsx', 'wb') as f:
-    f.write(filedata)
+    f.write(filedata.content)
 
 # Set plot style
 plt.style.use("ggplot")
@@ -33,7 +33,10 @@ df = xl.parse("Tests by specimen date")
 county_list = ["Conwy", "Denbighshire", "Flintshire", "Gwynedd", "Isle of Anglesey", "Wrexham"]
 
 fig = plt.figure(dpi=1000)
-frame1=fig.add_axes((.15,.18,.8,.8))
+w, h = figaspect(0.8)
+plt.subplots(figsize=(w,h))
+plt.subplot(1,1,1)
+#frame1=fig.add_axes((.15,.18,.8,.8))
 # Iterate through all counties
 for i in range(len(county_list)):
     # Get name of county
@@ -83,7 +86,8 @@ plt.xlabel("Date")
 plt.legend(facecolor="white")
 
 # Save figure to png file
-plt.savefig("covid_n_wales.png")
+plt.tight_layout()
+plt.savefig("covid_n_wales.png",dpi=1000)
 
 # Get first sheet
 contents = xl.parse("Contents")
