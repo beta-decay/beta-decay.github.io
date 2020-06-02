@@ -56,8 +56,8 @@ for i in range(len(county_list)):
 moving_average = np.zeros(len(avg_sum)-7)
 
 # Calculate 7-day moving average
-for j in range(5,len(avg_sum)-1):
-    moving_average[j-6] = sum(avg_sum[j-6:j])/7
+for j in range(7,len(avg_sum)):
+    moving_average[j-7] = sum(avg_sum[j-7:j])/7
 
 # Plot the data
 plt.plot(avg_dates[:-7-15], moving_average[:-15])

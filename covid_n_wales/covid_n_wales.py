@@ -52,8 +52,8 @@ for i in range(len(county_list)):
     moving_average = np.zeros(len(new_cases)-7)
     
     # Calculate 7-day moving average
-    for j in range(5,len(new_cases)-1):
-        moving_average[j-6] = sum(new_cases[j-6:j])/7
+    for j in range(7,len(new_cases)):
+        moving_average[j-7] = sum(new_cases[j-7:j])/7
 
     # Plot the data
     plt.plot(date[:-7-15], moving_average[:-15], label=county_name, color=cmap(i))
