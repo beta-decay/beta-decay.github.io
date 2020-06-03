@@ -32,7 +32,7 @@ df = xl.parse("Tests by specimen date")
 # List of counties in North Wales
 county_list = ["Conwy", "Denbighshire", "Flintshire", "Gwynedd", "Isle of Anglesey", "Wrexham"]
 
-fig = plt.figure(dpi=1000)
+fig = plt.figure(dpi=400)
 w, h = figaspect(0.8)
 plt.subplots(figsize=(w,h))
 plt.subplot(1,1,1)
@@ -87,7 +87,7 @@ plt.legend(facecolor="white")
 
 # Save figure to png file
 plt.tight_layout()
-plt.savefig("covid_n_wales.png",dpi=1000)
+plt.savefig("covid_n_wales.png",dpi=400)
 
 # Get first sheet
 contents = xl.parse("Contents")

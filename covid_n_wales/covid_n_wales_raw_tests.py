@@ -47,13 +47,12 @@ for i in range(len(county_list)):
 
     # Extract data
     date = np.array(county["Specimen date"])
-    new_cases = np.array(county["Cases (new)"])
     testing_episodes = np.array(county["Testing episodes (new)"])
-    moving_average = np.zeros(len(new_cases)-7)
+    moving_average = np.zeros(len(testing_episodes)-7)
     
     # Calculate 7-day moving average
-    for j in range(7,len(new_cases)):
-        moving_average[j-7] = sum(new_cases[j-7:j]/testing_episodes[j-7:j]*100)/7
+    for j in range(7,len(testing_episodes)):
+        moving_average[j-7] = sum(testing_episodes[j-7:j])/7
 
     # Plot the data
     plt.plot(date[:-7-15], moving_average[:-15], label=county_name, color=cmap(i))
@@ -79,7 +78,7 @@ myFmt = mdates.DateFormatter('%d/%m/%Y')
 ax.xaxis.set_major_formatter(myFmt)
 
 # Add axis labels
-plt.ylabel("Daily Percentage of Positive Tests\n(7-day Moving Average)")
+plt.ylabel("Number of Tests Per Day\n(7-day Moving Average)")
 plt.xlabel("Date")
 
 # Add legend
@@ -87,7 +86,7 @@ plt.legend(facecolor="white")
 
 # Save figure to png file
 plt.tight_layout()
-plt.savefig("covid_n_wales_tests.png",dpi=400)
+plt.savefig("covid_n_wales_raw_tests.png",dpi=400)
 
 # Get first sheet
 contents = xl.parse("Contents")
