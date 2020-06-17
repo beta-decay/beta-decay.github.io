@@ -36,64 +36,66 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 		<style>
             .navbar {
-              overflow: hidden;
-              background-color: #333;
-            }
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-            .navbar a {
-              float: left;
-              font-size: 16px;
-              color: white;
-              text-align: center;
-              padding: 14px 16px;
-              text-decoration: none;
-            }
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
 
-            .dropdown {
-              float: left;
-              overflow: hidden;
-            }
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
 
-            .dropdown .dropbtn {
-              font-size: 16px;  
-              border: none;
-              outline: none;
-              color: white;
-              padding: 14px 16px;
-              background-color: inherit;
-              font-family: inherit;
-              margin: 0;
-            }
+.dropdown .dropbtn {
+  cursor: pointer;
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
 
-            .navbar a:hover, .dropdown:hover .dropbtn {
-              background-color: red;
-            }
+.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+  background-color: red;
+}
 
-            .dropdown-content {
-              display: none;
-              position: absolute;
-              background-color: #f9f9f9;
-              min-width: 160px;
-              box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-              z-index: 1;
-            }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
 
-            .dropdown-content a {
-              float: none;
-              color: black;
-              padding: 12px 16px;
-              text-decoration: none;
-              display: block;
-              text-align: left;
-            }
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
 
-            .dropdown-content a:hover {
-              background-color: #ddd;
-            }
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
 
-            .dropdown:hover .dropdown-content {
-              display: block;
-            }
+.show {
+  display: block;
+}
             
 			body {
 				padding-left: 2em;
@@ -143,21 +145,18 @@
         
         <div class="navbar">
           <a href="#home">Home</a>
+          <a href="#news">News</a>
           <div class="dropdown">
-            <button class="dropbtn">Modules
-              <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-content">
-              <a href="#">Link 1</a>
-              <a href="#">Link 2</a>
-              <a href="#">Link 3</a>
-            </div>
+          <button class="dropbtn" onclick="myFunction()">Dropdown
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content" id="myDropdown">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
           </div>
-          <a href="#news">Homeworks</a>
-          <a href="#news">Workshops</a>
-          <a href="#news">Exams</a>
-          <a href="#news">Encore</a>
-        </div> 
+          </div> 
+        </div>
 
         This is a webpage with useful information relating to the Level 3 Physics course at Durham University. Unless specified, all lecture notes have been rehosted in the event that DUO goes down.<br/><br/>
         
@@ -392,5 +391,22 @@
         <h4><a href="https://notes.dmaitre.phyip3.dur.ac.uk/compphys/">Lecture notes (hosted externally)</a><h4>
         <h4><a href="https://notebooks.dmaitre.phyip3.dur.ac.uk/compphys-1920/">Jupyter Notebook</a></h4>
         <br/><br/>
+        <script>
+        /* When the user clicks on the button, 
+        toggle between hiding and showing the dropdown content */
+        function myFunction() {
+          document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(e) {
+          if (!e.target.matches('.dropbtn')) {
+          var myDropdown = document.getElementById("myDropdown");
+            if (myDropdown.classList.contains('show')) {
+              myDropdown.classList.remove('show');
+            }
+          }
+        }
+        </script>
     </body>
 </html>
