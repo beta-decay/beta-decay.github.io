@@ -10,6 +10,8 @@
 
           gtag('config', 'UA-149936018-1');
         </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
         <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
@@ -34,69 +36,7 @@
 		</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-		<style>
-            .navbar {
-  overflow: hidden;
-  background-color: #333;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.navbar a {
-  float: left;
-  font-size: 16px;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.dropdown {
-  float: left;
-  overflow: hidden;
-}
-
-.dropdown .dropbtn {
-  cursor: pointer;
-  font-size: 16px;  
-  border: none;
-  outline: none;
-  color: white;
-  padding: 14px 16px;
-  background-color: inherit;
-  font-family: inherit;
-  margin: 0;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
-  background-color: red;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  float: none;
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.dropdown-content a:hover {
-  background-color: #ddd;
-}
-
-.show {
-  display: block;
-}
-            
+		<style>            
 			body {
 				padding-left: 2em;
                 padding-right: 2em;
@@ -140,23 +80,32 @@
 		</style>
 	</head>
 	<body>
-        <h1><a href="https://www.facebook.com/baltyboi" style="color:#333;text-decoration:none">Level 3 Physics information</a><div style="float:right"><a style="font-size: 0.7em" href="https://durham.cloud.panopto.eu/">Encore recordings</a></div></h1>
-        <br/>
-        
-        <div class="navbar">
-          <a href="#home">Home</a>
-          <a href="#news">News</a>
-          <div class="dropdown">
-          <button class="dropbtn" onclick="myFunction()">Dropdown
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div class="dropdown-content" id="myDropdown">
-            <a href="#">Link 1</a>
-            <a href="#">Link 2</a>
-            <a href="#">Link 3</a>
+         <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container-fluid">
+            <ul class="nav navbar-nav">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="https://www.facebook.com/baltyboi">Level 3 Physics Info</a>
+              </div>
+              <li class="active"><a href=".">Home</a></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="./modulelist/">Modules
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="./fop3a/">Foundations of Physics 3A</a></li>
+                  <li><a href="./fop3b/">Foundations of Physics 3B</a></li>
+                  <li><a href="./planets/">Planets and Cosmology 3</a></li>
+                  <li><a href="./tp3/">Theoretical Physics 3</a></li>
+                  <li><a href="./cmp3/">Condensed Matter Physics 3</a></li>
+                  <li><a href="./maop3/">Modern Atomic and Optical Physics 3</a></li>
+                  <li><a href="https://durham.cloud.panopto.eu/">Encore</a></li>
+                </ul>
+              </li>
+              <li><a href="./homeworks/">Homeworks</a></li>
+              <li><a href="./workshops/">Workshops</a></li>
+              <li><a href="./exams/">Exams</a></li>
+            </ul>
           </div>
-          </div> 
-        </div>
+        </nav> 
 
         This is a webpage with useful information relating to the Level 3 Physics course at Durham University. Unless specified, all lecture notes have been rehosted in the event that DUO goes down.<br/><br/>
         
@@ -391,22 +340,6 @@
         <h4><a href="https://notes.dmaitre.phyip3.dur.ac.uk/compphys/">Lecture notes (hosted externally)</a><h4>
         <h4><a href="https://notebooks.dmaitre.phyip3.dur.ac.uk/compphys-1920/">Jupyter Notebook</a></h4>
         <br/><br/>
-        <script>
-        /* When the user clicks on the button, 
-        toggle between hiding and showing the dropdown content */
-        function myFunction() {
-          document.getElementById("myDropdown").classList.toggle("show");
-        }
-
-        // Close the dropdown if the user clicks outside of it
-        window.onclick = function(e) {
-          if (!e.target.matches('.dropbtn')) {
-          var myDropdown = document.getElementById("myDropdown");
-            if (myDropdown.classList.contains('show')) {
-              myDropdown.classList.remove('show');
-            }
-          }
-        }
-        </script>
+        
     </body>
 </html>
