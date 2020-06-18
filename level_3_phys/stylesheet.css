@@ -1,6 +1,6 @@
 .container {
     background-color: gainsboro;
-    height: 100vh;
+    min-height: 100vh;
     width: 80vw;
     padding-left: 2%;
     padding-right: 2%;
