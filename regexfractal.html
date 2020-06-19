@@ -1,0 +1,95 @@
+<html>
+	<head>
+		<title>Regex Image Generator</title>
+	</head>
+	<body>
+		<h1>Regex Image Maker</h1>
+		<h3>Based on <a href="http://christianp.github.io/regex-fractals">Regex Fractals</a></h3>
+		This works by using a regular expression to match the coordinates of each pixel in the 200 by 200 image below.
+		<br/>
+		<table>
+			<tr>
+				<td>
+					<canvas id="canvas" width=200 height=200></canvas>
+				</td>
+				<td style="padding:20px;">
+					Change colours:<br/>
+					<input id="mcol" oninput="javascript:cMcol()" value="#000000"><br/>
+					<input id="nmcol" oninput="javascript:cNMcol()" value="#FFFFFF">
+				</td>
+			</tr>
+		</table>
+		<br/><br/>
+		Regex: <input id="regex"><br/>
+		Check: regex.test(x) 
+		<select id="operator">
+			<option value="&&">AND</option>
+			<option value="||">OR</option>
+			<option value="^">XOR</option>
+		</select>
+		 regex.test(y)<br/><br/>
+		<button id="submit"  onclick="javascript:drawFrac()">Generate image</button><br/>
+		<a href="javascript:getperma()">Get permalink</a>
+		
+		<script>		
+			var matchcol = "#000000";
+			var nmatchcol = "#FFFFFF";
+			
+			function cMcol() {
+				matchcol = document.getElementById("mcol").value;
+			}
+			
+			function cNMcol() {
+				nmatchcol = document.getElementById("nmcol").value;
+			}
+		
+			function decode(string) {
+				return decodeURIComponent(escape(atob(unescape(string).replace(/-/g, "+").replace(/_/g, "/"))))
+			}
+
+			function encode(string) {
+				return btoa(unescape(encodeURIComponent(string))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "")
+			}
+		
+			function getperma() {
+				var lcode = document.getElementById("regex").value;
+				var link = location.protocol + '//' + location.host + location.pathname + "?re=" + encode(lcode);
+			
+				window.open(link);
+			}
+			
+			function drawFrac() {
+				var regex = new RegExp(document.getElementById("regex").value);
+				var c = document.getElementById("canvas");
+				var ctx = c.getContext("2d");
+				
+				ctx.beginPath();
+				ctx.clearRect(0, 0, c.width, c.height);
+				
+				operator = document.getElementById("operator").value;
+				
+				for (var x = 0; x < 200; x++) {
+					for (var y = 0; y < 200; y++) {
+						
+						if (eval("regex.test(x.toString())" + operator + "regex.test(y.toString())")) {
+							ctx.fillStyle=matchcol;
+						} else {
+							ctx.fillStyle=nmatchcol;
+						}
+						ctx.fillRect(x, y, x, y);
+					}
+				}
+			}
+			
+			function getURLParameter(name) {
+				return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+			}
+		
+			var data = getURLParameter("re");
+		
+			if (data !== null) {
+				document.getElementById("regex").value = decode(data);
+			}
+		</script>
+	</body>
+</html>

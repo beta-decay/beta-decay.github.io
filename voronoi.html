@@ -1,0 +1,100 @@
+<html>
+	<head>
+		<style>
+			body {
+				font-family: Arial;
+				background-color: gainsboro;
+			}
+			thead {
+				font-weight: bold;
+			}
+			td {
+				column-width: 20px;
+			}
+			canvas {
+				border: 1px solid black;
+				background-color: white;
+			}
+			a {
+				text-decoration: none;
+				color: slateblue;
+			}
+		</style>
+		<title>Voronoi Diagram Generator</title>
+	</head>
+	<body>
+		<h1><a href="http://en.wikipedia.org/wiki/Voronoi_diagram">Voronoi Diagram</a> Generator</h1>
+		<br/><button onclick="javascript:draw()">Update Canvas</button><br/><br/>
+		<canvas id="canvas" width="300" height="300"></canvas><br/><br/>
+		Click button to add a point: <button onclick="javascript:addPoint()">Add point</button>
+		<br/><br/>
+		<table id="points">
+			<thead>
+				<tr id="head"></tr>
+			</thead>
+		</table>
+		<script type="text/javascript">
+			var points = [];
+			function updatePoints(action) {
+				for (var i = 0; i < points.length; i++) {
+					inputval = document.getElementById("point"+action+i).value;
+					document.getElementById("point"+action+i).value = inputval;
+					points[i][action.toLowerCase()] = inputval;
+				}
+			}
+
+			Array.min = function(a) {
+		 		return a.indexOf(Math.min.apply(Math, a));
+			}
+
+			function minDistance(x, y) {
+				var distances = [];
+				var colours = [];
+				for (var j = 0; j < points.length; j++) {
+					var point = points[j];
+					var d = Math.sqrt(Math.pow(point.x-x,2)+Math.pow(point.y-y,2));
+					distances.push(d);
+					colours.push(point.col);
+				}
+				var index = 0;
+				var value = distances[0];
+				for (var i = 1; i < distances.length; i++) {
+		  			if (distances[i] < value) {
+		   			 	value = distances[i];
+		   			 	index = i;
+		 		 	}
+				}
+				return colours[index];
+			}
+
+			function addPoint() {
+				pointNum = points.length;
+				points.push({"x": 0, "y": 0, "col": ""});
+				document.getElementById("head").innerHTML = "<td>X Position</td><td>Y Position</td><td>Point Colour</td>";
+				document.getElementById("points").innerHTML += '<td><input id="pointX'+pointNum+'" oninput="javascript:updatePoints(\'X\')" /></td><td><input id="pointY'+pointNum+'" oninput="javascript:updatePoints(\'Y\')" /></td><td><input id="pointCol'+pointNum+'" oninput="javascript:updatePoints(\'Col\')" /></td>';
+			}
+
+			function draw() {
+				var c = document.getElementById("canvas");
+				var ctx = c.getContext("2d");
+
+				ctx.beginPath();
+				ctx.clearRect(0, 0, c.width, c.height);
+		 
+				for (var x = 0; x < 300; x++) {
+					for (var y = 0; y < 300; y++) {
+						ctx.fillStyle = minDistance(x, y);
+
+						for (var i = 0; i < points.length; i++) {
+							if (Math.floor(x/3+0.5) == Math.floor(points[i].x/3+0.5) && Math.floor(y/3+0.5) == Math.floor(points[i].y/3+0.5)){
+		                		ctx.fillStyle = "black";
+							}
+						}
+
+						ctx.fillRect(x, y, x, y);
+					}
+				}
+			}
+		</script>
+	</body>
+</html>
