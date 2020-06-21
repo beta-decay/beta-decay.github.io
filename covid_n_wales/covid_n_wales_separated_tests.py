@@ -55,10 +55,20 @@ for i in range(3):
     
     # Calculate 7-day moving average
     for j in range(7,len(new_cases)):
-        moving_average[j-7] = sum(new_cases[j-7:j]/testing_episodes[j-7:j]*100)/7
+        no_nans = 0
+        num_sum = 0
+        for l in range(j-7,j):
+            if testing_episodes[l] == 0:
+                no_nans += 1
+            else:
+                num_sum += new_cases[l]/testing_episodes[l]*100
+        if no_nans == 7:
+             moving_average[j-7] = 0
+        else:
+             moving_average[j-7] = num_sum/(7-no_nans)
 
     # Plot the data
-    plt.plot(date[:-7-15], moving_average[:-15], label=county_name, color=cmap(i))
+    plt.plot(date[:-7-32], moving_average[:-32], label=county_name, color=cmap(i))
 
 ax = plt.gca()
 
@@ -106,10 +116,20 @@ for i in range(3,6):
     
     # Calculate 7-day moving average
     for j in range(7,len(new_cases)):
-        moving_average[j-7] = sum(new_cases[j-7:j]/testing_episodes[j-7:j]*100)/7
+        no_nans = 0
+        num_sum = 0
+        for l in range(j-7,j):
+            if testing_episodes[l] == 0:
+                no_nans += 1
+            else:
+                num_sum += new_cases[l]/testing_episodes[l]*100
+        if no_nans == 7:
+             moving_average[j-7] = 0
+        else:
+             moving_average[j-7] = num_sum/(7-no_nans)
 
     # Plot the data
-    plt.plot(date[:-7-15], moving_average[:-15], label=county_name, color=cmap(i))
+    plt.plot(date[:-7-32], moving_average[:-32], label=county_name, color=cmap(i))
 
 ax = plt.gca()
 
