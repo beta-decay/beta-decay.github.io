@@ -72,9 +72,9 @@ ax.tick_params(which="major", direction='out', left=True, right=False)
 ax.tick_params(which="minor", direction='out', left=True, right=False)
 ax.tick_params(which="major", direction='out', top=False, bottom=True)
 ax.tick_params(which="minor", direction='out', top=False, bottom=True)
-ax.xaxis.set_minor_locator(MultipleLocator(5))
-ax.xaxis.set_major_locator(MultipleLocator(10))
-ax.yaxis.set_minor_locator(MultipleLocator(1))
+ax.xaxis.set_minor_locator(MultipleLocator(10))
+ax.xaxis.set_major_locator(MultipleLocator(20))
+ax.yaxis.set_minor_locator(MultipleLocator(25))
 
 plt.gcf().autofmt_xdate()
 
