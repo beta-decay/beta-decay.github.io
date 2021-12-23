@@ -1,15 +1,15 @@
 .container {
     background-color: gainsboro;
     min-height: 100vh;
-    width: 80vw;
+    width: 80%;
     padding-left: 2%;
     padding-right: 2%;
+    padding-top:20px;
+    float:left;
 }
 
 body {
-    padding-left: 2em;
-    padding-right: 2em;
-    background-color: steelblue
+    background-image: url("ll_ori.jpg");
 }
 
 .title {
@@ -52,3 +52,61 @@ hr {
 .dropdown-menu {
  font-size: 90%;
 }
+
+ /* The sidebar menu */
+ .sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 320px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #111; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+  }
+  
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+  }
+  
+  .sidenav .name {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    color: #ffffff;
+    display: block;
+  }
+
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Style page content */
+  .main {
+    margin-left:320px; /* Same as the width of the sidebar */
+    padding: 0px 20px;
+  }
+  
+  /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  } 
+
+  .maintext {
+    padding: 6px 8px 6px 16px;
+  }
+
+  .maintext h1 {
+      font-size: 5em;
+  }
+
+  .maintext p {
+      font-size: 1.5em
+  }
