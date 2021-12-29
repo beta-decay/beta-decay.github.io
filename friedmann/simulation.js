@@ -110,7 +110,9 @@ function startSimulation(rad, mass, vac, hubble) {
           size: 18,
           color: '#7f7f7f'
         }
-      }
+      },
+      width: 800,
+      height: 800
     };
     
 	var ctx = document.getElementById("myChart");
