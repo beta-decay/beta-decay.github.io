@@ -11,7 +11,7 @@ import requests
 import re
 
 # Download Excel file
-filedata = requests.get('https://www2.nphs.wales.nhs.uk/CommunitySurveillanceDocs.nsf/3dc04669c9e1eaa880257062003b246b/c84f742604ce56f0802586b600374b49/$FILE/Rapid%20COVID-19%20surveillance%20data.xlsx')
+filedata = requests.get('https://www2.nphs.wales.nhs.uk/CommunitySurveillanceDocs.nsf/3dc04669c9e1eaa880257062003b246b/fb749601d64ee622802586a0003ef937/$FILE/Rapid%20COVID-19%20surveillance%20data.xlsx')
 
 # Write to Excel file
 with open('Rapid COVID-19 surveillance data.xlsx', 'wb') as f:
